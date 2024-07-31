@@ -2,7 +2,6 @@ package idv.mark.share_module.util;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import idv.mark.share_module.config.ConfigHelper;
 import idv.mark.share_module.model.CrawModel;
 import idv.mark.share_module.model.PapagoTranslateRequest;
 import idv.mark.share_module.model.RetryTimes;
@@ -17,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
@@ -35,28 +36,48 @@ public class TranslateUtil {
 
     private static RestTemplate restTemplate = new RestTemplate();
 
-    // 翻譯SRT檔案
+    // 翻譯SRT檔案 (取回File)
     public static File translate(File originalLanguageSRTfile, String crawUrl) throws IOException {
         Instant start = Instant.now();
         String text = FileUtils.readFileToString(originalLanguageSRTfile, "UTF-8");
         List<SRTModel> srtModelList = convertTextToSRTModels(text);
         File translateSRTFile = new File(String.format("%s/%s.srt", originalLanguageSRTfile.getParent(), "zh-tw"));
         retrySendAPIRequestWithTask(srtModelList, new RetryTimes(3), crawUrl);
+        sortSRTModel(srtModelList);
         Instant end = Instant.now();
         log.info("translate cost time: {}", end.toEpochMilli() - start.toEpochMilli());
         // 產出翻譯後的SRT檔案
         return translateSRTFile;
     }
 
+    // 翻譯SRT檔案 (取回SRTModel)
     public static List<SRTModel> translateToSRTModel(File originalLanguageSRTfile, String crawUrl) throws IOException {
         Instant start = Instant.now();
         String text = FileUtils.readFileToString(originalLanguageSRTfile, "UTF-8");
         List<SRTModel> srtModelList = convertTextToSRTModels(text);
         retrySendAPIRequestWithTask(srtModelList, new RetryTimes(3), crawUrl);
+        sortSRTModel(srtModelList);
         Instant end = Instant.now();
         log.info("translate cost time: {}", end.toEpochMilli() - start.toEpochMilli());
         // 產出翻譯後的SRT檔案
         return srtModelList;
+    }
+
+    // 將SRTModel存成檔案
+    public static void saveSrtToFile(List<SRTModel> srtModelList, String doneFileName) {
+        StringBuilder sb = new StringBuilder();
+        srtModelList.forEach(srtModel -> {
+            sb.append(srtModel.getSequence()).append("\n");
+            sb.append(srtModel.getTime()).append("\n");
+            sb.append(srtModel.getText()).append("\n");
+            sb.append(srtModel.getLineBreak());
+        });
+        File file = new File(doneFileName);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(sb.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // 重試機制
@@ -183,6 +204,11 @@ public class TranslateUtil {
         } catch (Exception e) {
             // ignore
         }
+    }
+
+    // 排序SRTModel (因為sequence可能亂序)
+    private static void sortSRTModel(List<SRTModel> srtModelList) {
+        srtModelList.sort(Comparator.comparing(SRTModel::getSequence));
     }
 
     // 重新append時間軸和Sequence回去
