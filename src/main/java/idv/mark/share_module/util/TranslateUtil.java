@@ -37,17 +37,11 @@ public class TranslateUtil {
     private static RestTemplate restTemplate = new RestTemplate();
 
     // 翻譯SRT檔案 (取回File)
-    public static File translate(File originalLanguageSRTfile, String crawUrl) throws IOException {
-        Instant start = Instant.now();
-        String text = FileUtils.readFileToString(originalLanguageSRTfile, "UTF-8");
-        List<SRTModel> srtModelList = convertTextToSRTModels(text);
-        File translateSRTFile = new File(String.format("%s/%s.srt", originalLanguageSRTfile.getParent(), "zh-tw"));
-        retrySendAPIRequestWithTask(srtModelList, new RetryTimes(3), crawUrl);
-        sortSRTModel(srtModelList);
-        Instant end = Instant.now();
-        log.info("translate cost time: {}", end.toEpochMilli() - start.toEpochMilli());
+    public static File translate(File originalLanguageSRTfile, String crawUrl, String doneFileNamePath) throws IOException {
+        List<SRTModel> srtModels = translateToSRTModel(originalLanguageSRTfile, crawUrl);
+        saveSrtToFile(srtModels, doneFileNamePath);
         // 產出翻譯後的SRT檔案
-        return translateSRTFile;
+        return new File(doneFileNamePath);
     }
 
     // 翻譯SRT檔案 (取回SRTModel)
