@@ -27,7 +27,7 @@ public class ApiHandlerConfig extends ResponseEntityExceptionHandler {
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<JsonResponse> exceptionHandler(CustomException e) {
         if (200 != e.getResponseEnum().getHttpStatusCode()) {
-            log.error("System Error: ", e);
+            log.error("System Error: ", e); 
             return ResponseEntity.status(e.getResponseEnum().getHttpStatusCode()).body(JsonResponse.of(e.getResponseEnum()));
         }
         return ResponseEntity.ok().body(JsonResponse.of(e.getResponseEnum()));
