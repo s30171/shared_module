@@ -2,10 +2,10 @@ package idv.mark.share_module.util;
 
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import idv.mark.share_module.model.CrawModel;
-import idv.mark.share_module.model.PapagoTranslateRequest;
-import idv.mark.share_module.model.RetryTimes;
-import idv.mark.share_module.model.SRTModel;
+import idv.mark.share_module.model.craw.CrawModel;
+import idv.mark.share_module.model.craw.PapagoTranslateRequest;
+import idv.mark.share_module.model.craw.RetryTimes;
+import idv.mark.share_module.model.craw.SRTModel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;

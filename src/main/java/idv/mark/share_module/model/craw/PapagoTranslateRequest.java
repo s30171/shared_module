@@ -1,4 +1,4 @@
-package idv.mark.share_module.model;
+package idv.mark.share_module.model.craw;
 
 import lombok.Data;
 
