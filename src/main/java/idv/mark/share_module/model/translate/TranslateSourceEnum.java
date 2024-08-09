@@ -7,5 +7,6 @@ public enum TranslateSourceEnum {
     Papago,
     DeepL,
     Azure,
+    Google,
     ;
 }
