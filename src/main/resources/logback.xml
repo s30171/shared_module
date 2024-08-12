@@ -1,0 +1,46 @@
+<configuration>
+
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
+
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <!-- 定義滾動文件 Appender -->
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 編碼器 -->
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <!-- 滾動策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 每天生成新文件的文件名模式 -->
+            <fileNamePattern>log/%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 可選：設定日誌文件的最大歷史記錄天數 -->
+            <maxHistory>30</maxHistory>
+            <!-- 可選：啟用清除舊日誌文件 -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ELASTIC" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <destination>35.221.133.199:5044</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"appName":"${APP_NAME}"}</customFields>
+        </encoder>
+    </appender>
+
+    <!-- root logger -->
+    <root level="info">
+        <appender-ref ref="ROLLING" />
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ELASTIC" />
+    </root>
+
+</configuration>
