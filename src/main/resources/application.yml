@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: share_module
+  main:
+    listeners:
+        org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent: idv.mark.share_module.config.LogbackContextInitializer
