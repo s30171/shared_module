@@ -1,4 +1,4 @@
-package idv.mark.share_module.config;
+package idv.mark.share_module.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -7,11 +7,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class ConfigHelper implements ApplicationContextAware {
+public class RESTUtil implements ApplicationContextAware {
 
     private static ApplicationContext context;
+    public static RestTemplate restTemplate = getRestTemplate();
 
-    public static RestTemplate getRestTemplate() {
+    private static RestTemplate getRestTemplate() {
         return context.getBean(RestTemplate.class);
     }
 

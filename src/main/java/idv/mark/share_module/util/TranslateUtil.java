@@ -34,7 +34,7 @@ public class TranslateUtil {
     // 設定一次送去翻譯的筆數
     private static final int partitionSize = 150;
 
-    private static RestTemplate restTemplate = new RestTemplate();
+    private static RestTemplate restTemplate = RESTUtil.restTemplate;
 
     // 翻譯SRT檔案 (取回File)
     public static File translate(File originalLanguageSRTfile, String crawUrl, String doneFileNamePath) throws IOException {
