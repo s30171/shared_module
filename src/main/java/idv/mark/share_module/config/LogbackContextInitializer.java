@@ -18,6 +18,7 @@ public class LogbackContextInitializer implements ApplicationListener<Applicatio
 
         Properties properties = new Properties();
         properties.put("APP_NAME", appName);
+        properties.put("appName", appName);
 
         MutablePropertySources propertySources = environment.getPropertySources();
         propertySources.addFirst(new PropertiesPropertySource("logbackConfig", properties));
