@@ -82,7 +82,12 @@
 			<artifactId>spring-boot-autoconfigure</artifactId>
 			<version>3.3.2</version>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/io.zipkin.reporter2/zipkin-reporter-brave -->
+		<dependency>
+			<groupId>io.zipkin.reporter2</groupId>
+			<artifactId>zipkin-reporter-brave</artifactId>
+			<version>3.4.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

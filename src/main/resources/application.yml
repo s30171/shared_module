@@ -4,3 +4,12 @@ spring:
   main:
     listeners:
         org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent: idv.mark.share_module.config.LogbackContextInitializer
+
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1
+  zipkin:
+    tracing:
+      endpoint: http://35.221.133.199:9411/api/v2/spans
