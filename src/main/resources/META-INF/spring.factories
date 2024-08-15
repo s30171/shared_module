@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=idv.mark.share_module.config.ZipkinConfig

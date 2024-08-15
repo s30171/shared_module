@@ -4,8 +4,3 @@ spring:
   main:
     listeners:
         org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent: idv.mark.share_module.config.LogbackContextInitializer
-org:
-  springframework:
-    boot:
-      autoconfigure:
-        EnableAutoConfiguration: idv.mark.share_module.config.ZipkinConfig
