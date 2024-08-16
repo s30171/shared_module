@@ -17,7 +17,6 @@ public class TracingAspect {
 
     private final Tracer tracer;
 
-
     // 定義一個 Pointcut，攔截所有使用了 TraceAsync 的方法
     @Pointcut("@annotation(TraceAsync)")
     public void annotatedWithTracingAsync() {
