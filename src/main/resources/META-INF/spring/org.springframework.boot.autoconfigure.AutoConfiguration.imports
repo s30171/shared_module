@@ -1,0 +1,3 @@
+idv.mark.share_module._aop.TracingAspect
+idv.mark.share_module.config.ZipkinConfig
+idv.mark.share_module.config.RestTemplateConfig
