@@ -30,7 +30,7 @@
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
-        <destination>35.221.133.199:5044</destination>
+        <destination>194.233.76.155:5044</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <customFields>{"appName":"${APP_NAME}"}</customFields>
         </encoder>
