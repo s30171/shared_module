@@ -14,6 +14,10 @@ public class ConfigHelper implements ApplicationContextAware {
         return context.getBean(clazz);
     }
 
+    public static <T> T getBean(Class<T> clazz, String beanName) {
+        return context.getBean(beanName, clazz);
+    }
+    
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         context = applicationContext;
