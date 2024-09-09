@@ -34,6 +34,20 @@
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <customFields>{"appName":"${APP_NAME}"}</customFields>
         </encoder>
+
+        <!-- 自訂的 TurboFilter 來過濾 ConnectException -->
+        <turboFilter class="ch.qos.logback.classic.turbo.MDCFilter">
+            <mdcKey>net.logstash.logback.appender.LogstashTcpSocketAppender</mdcKey>
+            <onMatch>DENY</onMatch>
+            <onMismatch>NEUTRAL</onMismatch>
+        </turboFilter>
+
+        <!-- 簡化 ConnectException 的 encoder -->
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>%d{HH:mm:ss.SSS} %-5level - %msg%n</pattern>
+            </layout>
+        </encoder>
     </appender>
 
     <!-- root logger -->
