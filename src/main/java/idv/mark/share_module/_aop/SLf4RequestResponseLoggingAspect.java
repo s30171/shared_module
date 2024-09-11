@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -44,8 +45,12 @@ public class SLf4RequestResponseLoggingAspect {
             if ("GET".equals(method)) {
                 log.info("method: [{}], requestUrl: [{}], classMethod: [{}], Request Parameters: [{}]", request.getMethod(), request.getRequestURL(), class_method, parameters);
             } else {
-                Object body = joinPoint.getArgs().length >= 1 ? joinPoint.getArgs()[0] : "";
-                log.info("method: [{}], requestUrl: [{}], classMethod: [{}], Request Parameters: [{}], Body: [{}]", request.getMethod(), request.getRequestURL(), class_method, parameters, gson.toJson(body));
+                Object[] args = joinPoint.getArgs();
+                String body = Arrays.stream(args)
+                        .filter(arg -> !(arg instanceof MultipartFile))  // 忽略 MultipartFile
+                        .map(gson::toJson)
+                        .collect(Collectors.joining(", "));
+                log.info("method: [{}], requestUrl: [{}], classMethod: [{}], Request Parameters: [{}], Body: [{}]", request.getMethod(), request.getRequestURL(), class_method, parameters, body);
             }
         } catch (Exception e) {
             log.error("print request error", e);
