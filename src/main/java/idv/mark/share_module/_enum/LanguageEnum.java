@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum LanguageEnum {
     CHINESE("ZH-HANT"),
 //    SIMPLIFIED_CHINESE("ZH-HANS"),
-    ENGLISH("EN"),
+    ENGLISH("EN-US"),
     JAPANESE("JA"),
     KOREAN("KO"),
     THAI("TH"),
