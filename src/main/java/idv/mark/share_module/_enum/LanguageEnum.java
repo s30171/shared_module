@@ -14,4 +14,13 @@ public enum LanguageEnum {
     THAI("TH"),
     ;
     private String code;
+
+    public LanguageEnum getByISOCode(String code) {
+        for (LanguageEnum languageEnum : LanguageEnum.values()) {
+            if (languageEnum.getCode().equals(code)) {
+                return languageEnum;
+            }
+        }
+        return null;
+    }
 }
