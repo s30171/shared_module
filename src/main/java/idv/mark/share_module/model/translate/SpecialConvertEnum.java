@@ -6,5 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum SpecialConvertEnum {
-    tripleS
+    tripleS,
+    tripleSKR
 }
