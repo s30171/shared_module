@@ -17,7 +17,7 @@ public enum LanguageEnum {
 
     public static LanguageEnum getByISOCode(String code) {
         for (LanguageEnum languageEnum : LanguageEnum.values()) {
-            if (languageEnum.getCode().equals(code)) {
+            if (languageEnum.getCode().equalsIgnoreCase(code)) {
                 return languageEnum;
             }
         }
