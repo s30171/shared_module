@@ -15,7 +15,7 @@ public enum LanguageEnum {
     ;
     private String code;
 
-    public LanguageEnum getByISOCode(String code) {
+    public static LanguageEnum getByISOCode(String code) {
         for (LanguageEnum languageEnum : LanguageEnum.values()) {
             if (languageEnum.getCode().equals(code)) {
                 return languageEnum;
