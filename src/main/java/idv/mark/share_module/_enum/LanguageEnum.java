@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum LanguageEnum {
     CHINESE("ZH-HANT"),
-    SIMPLIFIED_CHINESE("ZH-HANS"),
+//    SIMPLIFIED_CHINESE("ZH-HANS"),
     ENGLISH("EN"),
     JAPANESE("JA"),
     KOREAN("KO"),
