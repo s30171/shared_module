@@ -15,10 +15,6 @@ public enum TranslateSourceSetting {
             LanguageEnum.THAI, TranslateSourceEnum.Azure,
             LanguageEnum.KOREAN, TranslateSourceEnum.Papago
     )),
-    SIMPLIFIED_CHINESE(TranslateSourceEnum.DeepL, Map.of(
-            LanguageEnum.THAI, TranslateSourceEnum.Google,
-            LanguageEnum.KOREAN, TranslateSourceEnum.Papago
-    )),
     ENGLISH(TranslateSourceEnum.Azure, Map.of(
             LanguageEnum.THAI, TranslateSourceEnum.Azure
     )),
