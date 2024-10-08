@@ -38,7 +38,7 @@ public class ChatGPTUtil {
         log.info("ChatResponse: {}", body);
         return body.getChoices().get(0).getMessage().getContent();
     }
-
+ 
     public ResponseEntity<String> promptWithReq(String model, String promptText) {
         log.info("promptText: {}", promptText);
         ChatGPTPromptRequest request = new ChatGPTPromptRequest(model, promptText, pass);
