@@ -8,5 +8,6 @@ public enum TranslateSourceEnum {
     DeepL,
     Azure,
     Google,
+    ChatGPTKoreaSRT,
     ;
 }
