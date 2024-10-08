@@ -7,11 +7,11 @@ import org.apache.commons.lang3.StringUtils;
 @Data
 @NoArgsConstructor
 public class ChatGPTPromptRequest {
-    private String postBody;
     private String model = "gpt-4o-mini";
+    private String postBody;
     private String pass;
 
-    public ChatGPTPromptRequest(String postBody, String model, String pass) {
+    public ChatGPTPromptRequest(String model, String postBody, String pass) {
         this.postBody = postBody;
         if (StringUtils.isNotBlank(model)) {
             this.model = model;

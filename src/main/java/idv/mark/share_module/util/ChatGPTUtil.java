@@ -1,5 +1,6 @@
 package idv.mark.share_module.util;
 
+import idv.mark.share_module.config.ConfigHelper;
 import idv.mark.share_module.model.chatgpt.ChatGPTPromptRequest;
 import idv.mark.share_module.model.chatgpt.ChatRequest;
 import idv.mark.share_module.model.chatgpt.ChatResponse;
@@ -10,39 +11,68 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
 public class ChatGPTUtil {
 
-    @Value("${chatgpt.api-url}")
+    @Value("${chatgpt.api-url:https://api.openai.com/v1/chat/completions}")
     private String gptApiUrl;
-    @Value("${chatgpt.api-key}")
+    @Value("${chatgpt.api-key:{null}}")
     private String gptApiKey;
-    @Value("${craw.api-url}")
+    @Value("${craw.api-url:{null}}")
     private String crawApiUrl;
-    @Value("${craw.pass}")
+    @Value("${craw.pass:{null}}")
     private String pass;
 
     public String prompt(String model, String promptText) {
-        log.info("promptText: {}", promptText);
+        if (promptText.length() > 100) {
+            String showPromptText = promptText.substring(0, 100) + "...";
+            showPromptText += promptText.substring(promptText.length() - 100);
+            log.info("promptText: {}", showPromptText);
+        } else {
+            log.info("promptText: {}", promptText);
+        }
         ChatRequest request = new ChatRequest(model, promptText, 1);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type", "application/json");
         httpHeaders.add("Authorization", "Bearer " + gptApiKey);
         HttpEntity<ChatRequest> chatRequestHttpEntity = new HttpEntity<>(request, httpHeaders);
-        ResponseEntity<ChatResponse> responseEntity = RESTUtil.restTemplate.exchange(gptApiUrl, HttpMethod.POST, chatRequestHttpEntity, ChatResponse.class);
+        ResponseEntity<ChatResponse> responseEntity = ConfigHelper.getBean(RestTemplate.class).exchange(gptApiUrl, HttpMethod.POST, chatRequestHttpEntity, ChatResponse.class);
         ChatResponse body = responseEntity.getBody();
-        log.info("ChatResponse: {}", body);
+        if (body != null) {
+            String content = body.getChoices().get(0).getMessage().getContent();
+            if (content.length() > 100) {
+                String showBody = content.substring(0, 100) + "...";
+                showBody += content.substring(content.length() - 100);
+                log.info("ChatResponse: {}", showBody);
+            } else {
+                log.info("ChatResponse: {}", body);
+            }
+        }
         return body.getChoices().get(0).getMessage().getContent();
     }
 
     public ResponseEntity<String> promptWithReq(String model, String promptText) {
-        log.info("promptText: {}", promptText);
+        if (promptText.length() > 100) {
+            String showPromptText = promptText.substring(0, 100) + "...";
+            showPromptText += promptText.substring(promptText.length() - 100);
+            log.info("promptText: {}", showPromptText);
+        } else {
+            log.info("promptText: {}", promptText);
+        }
         ChatGPTPromptRequest request = new ChatGPTPromptRequest(model, promptText, pass);
-        ResponseEntity<String> response = RESTUtil.restTemplate.postForEntity(crawApiUrl, request, String.class);
+        String url = String.format("%s/api/prompt", crawApiUrl);
+        ResponseEntity<String> response = ConfigHelper.getBean(RestTemplate.class).postForEntity(url, request, String.class);
         String body = response.getBody();
-        log.info("ChatResponse: {}", body);
+        if (body != null && body.length() > 100) {
+            String showBody = body.substring(0, 100) + "...";
+            showBody += body.substring(body.length() - 100);
+            log.info("ChatResponse: {}", showBody);
+        } else {
+            log.info("ChatResponse: {}", body);
+        }
         return response;
     }
 
