@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>idv.mark</groupId>
-	<artifactId>share_module</artifactId>
+	<artifactId>shared_module</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>share_module</name>
+	<name>shared_module</name>
 	<url/>
 	<licenses>
 		<license/>
