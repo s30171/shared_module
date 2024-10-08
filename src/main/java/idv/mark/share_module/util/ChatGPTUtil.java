@@ -24,7 +24,6 @@ public class ChatGPTUtil {
     private String crawApiUrl;
     @Value("${craw.pass}")
     private String pass;
-    private static final String defaultModel = "gpt-4o-mini";
 
     public String prompt(String model, String promptText) {
         log.info("promptText: {}", promptText);
@@ -49,6 +48,6 @@ public class ChatGPTUtil {
     }
 
     public ResponseEntity<String> promptWithReq(String promptText) {
-        return promptWithReq(defaultModel, promptText);
+        return promptWithReq(null, promptText);
     }
 }
