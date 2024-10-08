@@ -9,11 +9,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-@Service
+@Component
 public class ChatGPTUtil {
 
     @Value("${chatgpt.api-url}")
@@ -32,7 +31,7 @@ public class ChatGPTUtil {
         httpHeaders.add("Content-Type", "application/json");
         httpHeaders.add("Authorization", "Bearer " + gptApiKey);
         HttpEntity<ChatRequest> chatRequestHttpEntity = new HttpEntity<>(request, httpHeaders);
-        ResponseEntity<ChatResponse> responseEntity = new RestTemplate().exchange(gptApiUrl, HttpMethod.POST, chatRequestHttpEntity, ChatResponse.class);
+        ResponseEntity<ChatResponse> responseEntity = RESTUtil.restTemplate.exchange(gptApiUrl, HttpMethod.POST, chatRequestHttpEntity, ChatResponse.class);
         ChatResponse body = responseEntity.getBody();
         log.info("ChatResponse: {}", body);
         return body.getChoices().get(0).getMessage().getContent();
