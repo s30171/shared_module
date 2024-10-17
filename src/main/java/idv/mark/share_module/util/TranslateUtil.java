@@ -5,6 +5,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import idv.mark.share_module._enum.LanguageEnum;
 import idv.mark.share_module.config.ConfigHelper;
+import idv.mark.share_module.config.RemoteApiUrlConfig;
 import idv.mark.share_module.model.craw.SRTModel;
 import idv.mark.share_module.model.translate.SpecialConvertEnum;
 import idv.mark.share_module.model.translate.TranslateModel;
@@ -12,7 +13,6 @@ import idv.mark.share_module.model.translate.TranslateSourceEnum;
 import idv.mark.share_module.res.JsonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -28,16 +28,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TranslateUtil {
 
-    @Value("{translate.url:{null}}")
-    private String translateUrl;
-
     public TranslateModel translate(TranslateModel request) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         String json = new Gson().toJson(request);
         HttpEntity<String> entity = new HttpEntity<>(json, headers);
         Type type = new TypeToken<JsonResponse<TranslateModel>>() {}.getType();
-        ResponseEntity<String> translateModelResponseEntity = ConfigHelper.getBean(RestTemplate.class).postForEntity(translateUrl, entity, String.class);
+        String url = ConfigHelper.getBean(RemoteApiUrlConfig.class).getTranslateUrl();
+        ResponseEntity<String> translateModelResponseEntity = ConfigHelper.getBean(RestTemplate.class).postForEntity(url, entity, String.class);
         String body = translateModelResponseEntity.getBody();
         JsonResponse<TranslateModel> translateModelJsonResponse = new Gson().fromJson(body, type);
         return translateModelJsonResponse.getData();
