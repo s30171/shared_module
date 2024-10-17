@@ -1,15 +1,27 @@
 package idv.mark.share_module.util;
 
 import idv.mark.share_module.model.craw.SRTModel;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SRTUtil {
+
+    public static List<SRTModel> srtFileToSRTModel(File file) {
+        try {
+            String fileText = FileUtils.readFileToString(file, "UTF-8");
+            return convertToSRTModel(fileText);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     // 將SRT文字轉換為SRTModel
     public static List<SRTModel> convertToSRTModel(String text) {
