@@ -34,7 +34,7 @@ public class TranslateUtil {
         String json = new Gson().toJson(request);
         HttpEntity<String> entity = new HttpEntity<>(json, headers);
         Type type = new TypeToken<JsonResponse<TranslateModel>>() {}.getType();
-        String url = ConfigHelper.getBean(RemoteApiUrlConfig.class).getTranslateUrl();
+        String url = String.format("%s/api/translate", ConfigHelper.getBean(RemoteApiUrlConfig.class).getTranslateUrl());
         ResponseEntity<String> translateModelResponseEntity = ConfigHelper.getBean(RestTemplate.class).postForEntity(url, entity, String.class);
         String body = translateModelResponseEntity.getBody();
         JsonResponse<TranslateModel> translateModelJsonResponse = new Gson().fromJson(body, type);
