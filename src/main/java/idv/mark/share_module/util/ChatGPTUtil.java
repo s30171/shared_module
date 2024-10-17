@@ -1,6 +1,7 @@
 package idv.mark.share_module.util;
 
 import idv.mark.share_module.config.ConfigHelper;
+import idv.mark.share_module.config.RemoteApiUrlConfig;
 import idv.mark.share_module.model.chatgpt.ChatGPTPromptRequest;
 import idv.mark.share_module.model.chatgpt.ChatRequest;
 import idv.mark.share_module.model.chatgpt.ChatResponse;
@@ -21,10 +22,6 @@ public class ChatGPTUtil {
     private String gptApiUrl;
     @Value("${chatgpt.api-key:{null}}")
     private String gptApiKey;
-    @Value("${craw.api-url:{null}}")
-    private String crawApiUrl;
-    @Value("${craw.pass:{null}}")
-    private String pass;
 
     public String prompt(String model, String promptText) {
         if (promptText.length() > 100) {
@@ -62,8 +59,8 @@ public class ChatGPTUtil {
         } else {
             log.info("promptText: {}", promptText);
         }
-        ChatGPTPromptRequest request = new ChatGPTPromptRequest(model, promptText, pass);
-        String url = String.format("%s/api/prompt", crawApiUrl);
+        ChatGPTPromptRequest request = new ChatGPTPromptRequest(model, promptText, ConfigHelper.getBean(RemoteApiUrlConfig.class).getPass());
+        String url = String.format("%s/api/prompt", ConfigHelper.getBean(RemoteApiUrlConfig.class).getCrawUrl());
         ResponseEntity<String> response = ConfigHelper.getBean(RestTemplate.class).postForEntity(url, request, String.class);
         String body = response.getBody();
         if (body != null && body.length() > 100) {
