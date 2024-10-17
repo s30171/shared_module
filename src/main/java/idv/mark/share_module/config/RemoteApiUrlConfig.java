@@ -14,5 +14,5 @@ public class RemoteApiUrlConfig {
     @Value("${api-remote.craw.pass:{null}}")
     private String pass;
     @Value("${api-remote.translate.url:{null}}")
-    private String translateUrl; 
+    private String translateUrl;
 }
