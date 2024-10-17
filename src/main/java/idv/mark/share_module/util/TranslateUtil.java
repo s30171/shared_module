@@ -26,6 +26,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -141,6 +142,11 @@ public class TranslateUtil {
             sb.append(srtModel.getLineBreak()).append("\n");
         }
         return sb.toString();
+    }
+
+    // 將SRTModel轉換為SRT文字
+    public static String srtModelsExtractText(List<SRTModel> srtModels) {
+        return CollectionUtils.isEmpty(srtModels) ? "" : srtModels.stream().map(SRTModel::getText).collect(Collectors.joining("\n"));
     }
 
     private static SRTModel convertBlockToSRTModel(List<String> block) {
