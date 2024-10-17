@@ -98,6 +98,10 @@ public class SRTUtil {
         if (text.endsWith("\n")) {
             text = text.substring(0, text.length() - 1);
         }
-        return new SRTModel(Integer.parseInt(block.get(0)), block.get(1), text, "\n");
+        SRTModel srtModel = new SRTModel(Integer.parseInt(block.get(0)), block.get(1), text, "\n");
+        srtModel.resetIfHallucination();
+        srtModel.replaceSpecialCharacter();
+        srtModel.swapTimeCheck();
+        return srtModel;
     }
 }
