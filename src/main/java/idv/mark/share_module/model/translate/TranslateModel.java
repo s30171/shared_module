@@ -13,6 +13,7 @@ public class TranslateModel {
     private String sourceText;
     private LanguageEnum sourceLanguage;
     private TranslateSourceEnum translateSource;
+    private String gptModelName;
     private SpecialConvertEnum specialConvert;
     private LanguageEnum targetLanguage;
     private String targetText;

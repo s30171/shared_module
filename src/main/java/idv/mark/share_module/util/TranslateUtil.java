@@ -13,6 +13,7 @@ import idv.mark.share_module.model.translate.TranslateSourceEnum;
 import idv.mark.share_module.res.JsonResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -52,6 +53,21 @@ public class TranslateUtil {
         request.setSourceLanguage(sourceLanguageEnum);
         request.setSourceText(translateString);
         request.setTargetLanguage(targetLanguageEnum);
+        return translate(request);
+    }
+
+    public TranslateModel translateByGPT(String modelName, SpecialConvertEnum specialConvertEnum, LanguageEnum sourceLanguageEnum, LanguageEnum targetLanguageEnum, String translateString) {
+        TranslateModel request = new TranslateModel();
+        if (specialConvertEnum != null) {
+            request.setSpecialConvert(specialConvertEnum);
+        }
+        if (StringUtils.isNotBlank(modelName)) {
+            request.setGptModelName(modelName);
+        }
+        request.setSourceLanguage(sourceLanguageEnum);
+        request.setSourceText(translateString);
+        request.setTargetLanguage(targetLanguageEnum);
+        request.setTranslateSource(TranslateSourceEnum.ChatGPT);
         return translate(request);
     }
 
