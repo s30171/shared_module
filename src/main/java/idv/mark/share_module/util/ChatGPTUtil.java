@@ -2,7 +2,7 @@ package idv.mark.share_module.util;
 
 import idv.mark.share_module.config.ConfigHelper;
 import idv.mark.share_module.config.RemoteApiUrlConfig;
-import idv.mark.share_module.model.chatgpt.ChatGPTPromptRequest;
+import idv.mark.share_module.model.chatgpt.LLMPromptRequest;
 import idv.mark.share_module.model.chatgpt.ChatRequest;
 import idv.mark.share_module.model.chatgpt.ChatResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +59,7 @@ public class ChatGPTUtil {
         } else {
             log.info("promptText: {}", promptText);
         }
-        ChatGPTPromptRequest request = new ChatGPTPromptRequest(model, promptText, ConfigHelper.getBean(RemoteApiUrlConfig.class).getPass());
+        LLMPromptRequest request = new LLMPromptRequest(model, promptText, ConfigHelper.getBean(RemoteApiUrlConfig.class).getPass());
         String url = String.format("%s/api/prompt", ConfigHelper.getBean(RemoteApiUrlConfig.class).getCrawUrl());
         ResponseEntity<String> response = ConfigHelper.getBean(RestTemplate.class).postForEntity(url, request, String.class);
         String body = response.getBody();

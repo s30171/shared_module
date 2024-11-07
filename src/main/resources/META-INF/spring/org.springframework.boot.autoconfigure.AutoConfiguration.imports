@@ -3,6 +3,7 @@ idv.mark.share_module.config.ZipkinConfig
 idv.mark.share_module.config.RestTemplateConfig
 idv.mark.share_module.config.ConfigHelper
 idv.mark.share_module._aop.SLf4RequestResponseLoggingAspect
-idv.mark.share_module.util.ChatGPTUtil
 idv.mark.share_module.config.RemoteApiUrlConfig
 idv.mark.share_module.util.TranslateUtil
+idv.mark.share_module.util.ChatGPTUtil
+idv.mark.share_module.util.GrokUtil
