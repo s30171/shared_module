@@ -93,7 +93,13 @@ public class SRTUtil {
     }
 
     private static SRTModel convertBlockToSRTModel(List<String> block) {
-        String text = block.size() > 4 ? String.join("\n", block.subList(2, block.size())) : block.get(2);
+        String text = "";
+        if (block.size() <= 2) {
+            text = "";
+            System.out.println("block error : {" + String.join("\n", block) + "}");
+        } else if (block.size() >= 4) {
+            text = String.join("\n", block.subList(2, block.size()));
+        }
         // 移除最後一個換行符號（如果存在）
         if (text.endsWith("\n")) {
             text = text.substring(0, text.length() - 1);
