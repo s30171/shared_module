@@ -126,7 +126,7 @@ public class SRTUtil {
             return;
         }
         srtModels = srtModels.stream().sorted((Comparator.comparing(SRTModel::getSequence))).collect(Collectors.toList());
-        int sequence = 1;
+        int sequence = srtModels.get(0).getSequence();
         for (SRTModel srtModel : srtModels) {
             srtModel.setSequence(sequence++);
         }
