@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +55,11 @@ public class SRTUtil {
             String line = split[i];
             // 如果是新的編號行且currentBlock不為空，則處理並清空currentBlock
             if (line.matches("\\d+") && !currentBlock.isEmpty()) {
-                srtModels.add(convertBlockToSRTModel(currentBlock));
+                try {
+                    srtModels.add(convertBlockToSRTModel(currentBlock));
+                } catch (Exception e) {
+                    System.out.println("line error : {" + line + "}");
+                }
                 // 在這裡處理完整的SRT區塊
                 currentBlock.clear();
             }
@@ -65,9 +70,14 @@ public class SRTUtil {
             // 處理最後一行結束時的情況
             if (i == split.length - 1) {
                 // 處理最後一個SRT區塊
-                srtModels.add(convertBlockToSRTModel(currentBlock));
+                try {
+                    srtModels.add(convertBlockToSRTModel(currentBlock));
+                } catch (Exception e) {
+                    System.out.println("line error : {" + line + "}");
+                }
             }
         }
+        resetBlockSequence(srtModels);
 
         return srtModels;
     }
@@ -109,5 +119,16 @@ public class SRTUtil {
         srtModel.replaceSpecialCharacter();
         srtModel.swapTimeCheck();
         return srtModel;
+    }
+
+    private static void resetBlockSequence(List<SRTModel> srtModels) {
+        if (CollectionUtils.isEmpty(srtModels)) {
+            return;
+        }
+        srtModels = srtModels.stream().sorted((Comparator.comparing(SRTModel::getSequence))).collect(Collectors.toList());
+        int sequence = 1;
+        for (SRTModel srtModel : srtModels) {
+            srtModel.setSequence(sequence++);
+        }
     }
 }
