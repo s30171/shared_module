@@ -6,6 +6,7 @@ import idv.mark.share_module.model.chatgpt.LLMPromptRequest;
 import idv.mark.share_module.model.chatgpt.ChatRequest;
 import idv.mark.share_module.model.chatgpt.ChatResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -52,6 +53,15 @@ public class ChatGPTUtil {
     }
 
     public ResponseEntity<String> promptWithReq(String model, String systemPrompt, String userPrompt) {
+        if (StringUtils.isNotBlank(systemPrompt)) {
+            if (systemPrompt.length() > 100) {
+                String showSystemPrompt = systemPrompt.substring(0, 100) + "...";
+                showSystemPrompt += systemPrompt.substring(systemPrompt.length() - 100);
+                log.info("systemPrompt: {}", showSystemPrompt);
+            } else {
+                log.info("systemPrompt: {}", systemPrompt);
+            }
+        }
         if (userPrompt.length() > 100) {
             String showPromptText = userPrompt.substring(0, 100) + "...";
             showPromptText += userPrompt.substring(userPrompt.length() - 100);
@@ -59,6 +69,7 @@ public class ChatGPTUtil {
         } else {
             log.info("promptText: {}", userPrompt);
         }
+
         LLMPromptRequest request = new LLMPromptRequest(model, systemPrompt, userPrompt, ConfigHelper.getBean(RemoteApiUrlConfig.class).getPass());
         String url = String.format("%s/api/prompt", ConfigHelper.getBean(RemoteApiUrlConfig.class).getCrawUrl());
         ResponseEntity<String> response = ConfigHelper.getBean(RestTemplate.class).postForEntity(url, request, String.class);
