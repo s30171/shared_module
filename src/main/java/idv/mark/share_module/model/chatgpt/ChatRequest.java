@@ -1,6 +1,7 @@
 package idv.mark.share_module.model.chatgpt;
 
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,9 @@ public class ChatRequest {
         this.model = model;
         this.n = n;
         this.messages = new ArrayList<>();
-        this.messages.add(new Message("system", systemPrompt));
+        if (StringUtils.isNotBlank(systemPrompt)) {
+            this.messages.add(new Message("system", systemPrompt));
+        }
         this.messages.add(new Message("user", userPrompt));
     }
 }
