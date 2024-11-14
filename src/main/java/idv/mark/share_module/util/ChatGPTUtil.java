@@ -51,15 +51,15 @@ public class ChatGPTUtil {
         return body.getChoices().get(0).getMessage().getContent();
     }
 
-    public ResponseEntity<String> promptWithReq(String model, String promptText) {
-        if (promptText.length() > 100) {
-            String showPromptText = promptText.substring(0, 100) + "...";
-            showPromptText += promptText.substring(promptText.length() - 100);
+    public ResponseEntity<String> promptWithReq(String model, String systemPrompt, String userPrompt) {
+        if (userPrompt.length() > 100) {
+            String showPromptText = userPrompt.substring(0, 100) + "...";
+            showPromptText += userPrompt.substring(userPrompt.length() - 100);
             log.info("promptText: {}", showPromptText);
         } else {
-            log.info("promptText: {}", promptText);
+            log.info("promptText: {}", userPrompt);
         }
-        LLMPromptRequest request = new LLMPromptRequest(model, promptText, ConfigHelper.getBean(RemoteApiUrlConfig.class).getPass());
+        LLMPromptRequest request = new LLMPromptRequest(model, systemPrompt, userPrompt, ConfigHelper.getBean(RemoteApiUrlConfig.class).getPass());
         String url = String.format("%s/api/prompt", ConfigHelper.getBean(RemoteApiUrlConfig.class).getCrawUrl());
         ResponseEntity<String> response = ConfigHelper.getBean(RestTemplate.class).postForEntity(url, request, String.class);
         String body = response.getBody();
@@ -73,7 +73,11 @@ public class ChatGPTUtil {
         return response;
     }
 
+    public ResponseEntity<String> promptWithReq(String model, String userPrompt) {
+        return promptWithReq(model, null, userPrompt);
+    }
+
     public ResponseEntity<String> promptWithReq(String promptText) {
-        return promptWithReq(null, promptText);
+        return promptWithReq(null, null, promptText);
     }
 }
