@@ -11,6 +11,7 @@ public class LLMPromptRequest {
     private String systemPrompt;
     private String postBody;
     private String pass;
+    private double temperature = 0.3;
 
     public LLMPromptRequest(String model, String postBody, String pass) {
         this.postBody = postBody;
@@ -20,7 +21,7 @@ public class LLMPromptRequest {
         this.pass = pass;
     }
 
-    public LLMPromptRequest(String model, String systemPrompt, String postBody, String pass) {
+    public LLMPromptRequest(String model, String systemPrompt, String postBody, double temperature, String pass) {
         this.postBody = postBody;
         this.systemPrompt = systemPrompt;
         if (StringUtils.isNotBlank(model)) {
