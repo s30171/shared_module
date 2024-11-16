@@ -14,6 +14,7 @@ public class TranslateModel {
     private LanguageEnum sourceLanguage;
     private TranslateSourceEnum translateSource;
     private String gptModelName;
+    private double gptTemperature = 0.1;
     private SpecialConvertEnum specialConvert;
     private LanguageEnum targetLanguage;
     private String targetText;

@@ -56,13 +56,16 @@ public class TranslateUtil {
         return translate(request);
     }
 
-    public TranslateModel translateByGPT(String modelName, SpecialConvertEnum specialConvertEnum, LanguageEnum sourceLanguageEnum, LanguageEnum targetLanguageEnum, String translateString) {
+    public TranslateModel translateByGPT(Double gptTemperature, String modelName, SpecialConvertEnum specialConvertEnum, LanguageEnum sourceLanguageEnum, LanguageEnum targetLanguageEnum, String translateString) {
         TranslateModel request = new TranslateModel();
         if (specialConvertEnum != null) {
             request.setSpecialConvert(specialConvertEnum);
         }
         if (StringUtils.isNotBlank(modelName)) {
             request.setGptModelName(modelName);
+        }
+        if (gptTemperature != null) {
+            request.setGptTemperature(gptTemperature);
         }
         request.setSourceLanguage(sourceLanguageEnum);
         request.setSourceText(translateString);
