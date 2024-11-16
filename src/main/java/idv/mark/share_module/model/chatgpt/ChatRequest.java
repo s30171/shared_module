@@ -20,7 +20,7 @@ public class ChatRequest {
         this.messages.add(new Message("user", prompt));
     }
 
-    public ChatRequest(String model, String systemPrompt, String userPrompt, int n) {
+    public ChatRequest(String model, String systemPrompt, String userPrompt, int n, double temperature) {
         this.model = model;
         this.n = n;
         this.messages = new ArrayList<>();
@@ -28,5 +28,8 @@ public class ChatRequest {
             this.messages.add(new Message("system", systemPrompt));
         }
         this.messages.add(new Message("user", userPrompt));
+        if (temperature > 0) {
+            this.temperature = temperature;
+        }
     }
 }
