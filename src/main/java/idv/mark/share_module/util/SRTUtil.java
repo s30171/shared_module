@@ -107,7 +107,7 @@ public class SRTUtil {
         if (block.size() <= 2) {
             text = "";
             System.out.println("block error : {" + String.join("\n", block) + "}");
-        } else if (block.size() >= 4) {
+        } else {
             text = String.join("\n", block.subList(2, block.size()));
         }
         // 移除最後一個換行符號（如果存在）
