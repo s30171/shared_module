@@ -53,6 +53,7 @@ public class SRTUtil {
         List<String> currentBlock = new ArrayList<>();
         for (int i = 0; i < split.length; i++) {
             String line = split[i];
+            if (StringUtils.isNotBlank(line)) { line = line.trim(); }
             // 如果是新的編號行且currentBlock不為空，則處理並清空currentBlock
             if (line.matches("\\d+") && !currentBlock.isEmpty()) {
                 try {
