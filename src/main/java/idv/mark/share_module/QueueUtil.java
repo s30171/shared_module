@@ -1,7 +1,9 @@
 package idv.mark.share_module;
 
 import idv.mark.share_module._abstract.AbstractMessageHandler;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.PriorityQueue;
 
@@ -17,10 +19,8 @@ public class QueueUtil {
         queue.add(model);
     }
 
-    public void add(String text, Integer priority) {
-        Model model = new Model();
-        model.setMessage(text);
-        model.setPriority(priority);
+    public void add(Integer priority, String text) {
+        Model model = new Model(priority, text);
         queue.add(model);
     }
 
@@ -61,6 +61,8 @@ public class QueueUtil {
     }
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Model implements Comparable<Model> {
         private Integer priority;
         private String message;
