@@ -43,12 +43,16 @@ public class QueueUtil {
         stopped = false;
     }
 
-    private static synchronized boolean isStopped() {
+    private synchronized static boolean isStopped() {
         return stopped;
     }
 
-    public static void startPollingThread(AbstractMessageHandler handlerChain) {
-        if (pollingThread == null || !pollingThread.isAlive()) {
+    private synchronized static boolean threadDead() {
+        return pollingThread == null || !pollingThread.isAlive();
+    }
+
+    public synchronized static void startPollingThread(AbstractMessageHandler handlerChain) {
+        if (threadDead()) {
             pollingThread = new Thread(() -> {
                 while (!isStopped()) {
                     if (!busy && !queue.isEmpty()) {
@@ -74,6 +78,7 @@ public class QueueUtil {
                     }
                 }
             });
+            System.out.printf("create new polling thread, %s\n", pollingThread.getId());
             pollingThread.start(); // 啟動輪詢執行緒
         }
     }
