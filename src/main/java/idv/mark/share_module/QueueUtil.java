@@ -10,7 +10,7 @@ import java.util.PriorityQueue;
 public class QueueUtil {
     private static final PriorityQueue<Model> queue = new PriorityQueue<>();
     private static Boolean stopped = false;
-    private volatile static Boolean busy = false;
+    private static Boolean busy = false;
     private static Thread pollingThread;
 
     public static void add(String text) {
