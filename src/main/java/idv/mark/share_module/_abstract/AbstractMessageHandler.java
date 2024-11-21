@@ -1,7 +1,7 @@
 package idv.mark.share_module._abstract;
 
 public abstract class AbstractMessageHandler {
-    private AbstractMessageHandler nextHandler;
+    protected AbstractMessageHandler nextHandler;
 
     public AbstractMessageHandler(AbstractMessageHandler nextHandler) {
         this.nextHandler = nextHandler;
