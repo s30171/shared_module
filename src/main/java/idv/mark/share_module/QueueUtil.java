@@ -8,35 +8,35 @@ import lombok.NoArgsConstructor;
 import java.util.PriorityQueue;
 
 public class QueueUtil {
-    private PriorityQueue<Model> queue = new PriorityQueue<>();
-    private Boolean stopped = false;
-    private Boolean busy = false;
+    private static final PriorityQueue<Model> queue = new PriorityQueue<>();
+    private static Boolean stopped = false;
+    private static Boolean busy = false;
 
-    public void add(String text) {
+    public static void add(String text) {
         Model model = new Model();
         model.setMessage(text);
         model.setPriority(5);
         queue.add(model);
     }
 
-    public void add(Integer priority, String text) {
+    public static void add(Integer priority, String text) {
         Model model = new Model(priority, text);
         queue.add(model);
     }
 
-    public void stop() {
+    public static void stop() {
         stopped = true;
     }
 
-    public void go() {
+    public static void go() {
         stopped = false;
     }
 
-    public synchronized boolean isStopped() {
+    private static synchronized boolean isStopped() {
         return stopped;
     }
 
-    public void startPollingThread(AbstractMessageHandler handlerChain) {
+    public static void startPollingThread(AbstractMessageHandler handlerChain) {
         new Thread(() -> {
             while (!isStopped()) {
                 if (!busy && !queue.isEmpty()) {
