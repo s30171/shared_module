@@ -25,4 +25,11 @@ public enum LanguageEnum {
         }
         return null;
     }
+    
+    public String getSpiltISOCode() {
+        if (code.contains("-")) {
+            return code.split("-")[0];
+        }
+        return code;
+    }
 }
