@@ -20,6 +20,9 @@ public enum LanguageEnum {
                 return languageEnum;
             }
         }
+        if ("en".equals(code)) {
+            return ENGLISH;
+        }
         return null;
     }
 }
