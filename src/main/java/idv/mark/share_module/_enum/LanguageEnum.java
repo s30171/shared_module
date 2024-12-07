@@ -23,6 +23,9 @@ public enum LanguageEnum {
         if ("en".equals(code)) {
             return ENGLISH;
         }
+        if ("zh".equals(code)) {
+            return CHINESE;
+        }
         return null;
     }
 
