@@ -8,5 +8,6 @@ import lombok.Getter;
 public enum SpecialConvertEnum {
     tripleS,
     tripleSKR,
+    tripleSEN,
     SMOOTHLY
 }
