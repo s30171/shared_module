@@ -12,6 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SRTModel {
+    private static final int COMPRESS_STRING_LENGTH_LIMIT = 40;
+
     private Integer sequence;
     private String time;
     private String text;
@@ -155,10 +157,10 @@ public class SRTModel {
     }
 
     public void repeatedSubstringPattern() {
-        String s = this.text;
-        if (StringUtils.isAllBlank(s)) {
+        if (StringUtils.isAllBlank(this.text) || this.text.length() < COMPRESS_STRING_LENGTH_LIMIT) {
             return;
         }
+        String s = this.text;
         int n = s.length();
 
         // 使用滑動視窗檢查所有可能的子字串長度
@@ -193,6 +195,9 @@ public class SRTModel {
 
     // 壓縮整個字串
     public void compressString() {
+        if (StringUtils.isAllBlank(this.text) || this.text.length() < COMPRESS_STRING_LENGTH_LIMIT) {
+            return;
+        }
         if (!checkRepeat()) {
             return;
         }
