@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -136,5 +139,119 @@ public class SRTModel {
 
         // 計算毫秒數
         return (long) hours * 3600 * 1000 + (long) minutes * 60 * 1000 + seconds * 1000L + milliseconds;
+    }
+
+    // 壓縮整個字串
+    public boolean checkRepeat() {
+        if (StringUtils.isAllBlank(this.text)) {
+            return false;
+        }
+        // 將字串翻倍並移除頭尾
+        String doubledString = this.text + this.text;
+        String trimmedString = doubledString.substring(1, doubledString.length() - 1);
+
+        // 如果原始字串出現在 trimmedString 中，則可以由子字串重複組成
+        return trimmedString.contains(this.text);
+    }
+
+    public void repeatedSubstringPattern() {
+        String s = this.text;
+        if (StringUtils.isAllBlank(s)) {
+            return;
+        }
+        int n = s.length();
+
+        // 使用滑動視窗檢查所有可能的子字串長度
+        for (int len = 1; len <= n / 2; len++) {
+            // 取出子字串並進行匹配檢查
+            String substring = s.substring(0, len);
+            boolean match = true;
+
+            // 檢查所有長度為 len 的子字串是否一致
+            for (int i = 0; i + len <= n; i += len) {
+                if (!s.substring(i, i + len).equals(substring)) {
+                    match = false;
+                    break;
+                }
+            }
+
+            // 檢查剩餘部分是否與子字串的開頭一致
+            if (match && n % len != 0) {
+                String remainingPart = s.substring(n - n % len);
+                if (!substring.startsWith(remainingPart)) {
+                    match = false;
+                }
+            }
+
+            if (match) {
+                // 若匹配，返回去除重複的子字串
+                this.text = substring;
+                System.out.printf("repeatedSubstringPattern[%s], text:[%s] -> substring:[%s]\n", sequence, this.text, substring);
+            }
+        }
+    }
+
+    // 壓縮整個字串
+    public void compressString() {
+        if (!checkRepeat()) {
+            return;
+        }
+
+        StringBuilder result = new StringBuilder();
+        String remainingInput = this.text;
+        if (StringUtils.isAllBlank(remainingInput)) {
+            return;
+        }
+
+        while (!remainingInput.isEmpty()) {
+            List<String> patterns = detectRepeatedPatterns(remainingInput);
+
+            // 壓縮每個模式
+            for (String pattern : patterns) {
+                int count = 0;
+                while (remainingInput.startsWith(pattern)) {
+                    count++;
+                    remainingInput = remainingInput.substring(pattern.length());
+                }
+                result.append(pattern);
+                System.out.printf("compressString[%s], text:[%s] -> substring:[%s]\n", this.sequence, this.text, pattern);
+            }
+
+            // 處理無法再壓縮的部分
+            if (!remainingInput.isEmpty() && detectRepeatedPatterns(remainingInput).isEmpty()) {
+                result.append(remainingInput.charAt(0));
+                remainingInput = remainingInput.substring(1);
+            }
+        }
+        this.text = result.toString();
+    }
+
+    // 找出字串中的重複模式
+    private static List<String> detectRepeatedPatterns(String input) {
+        int n = input.length();
+        List<String> repeatedPatterns = new ArrayList<>();
+
+        for (int len = 1; len <= n / 2; len++) {
+            if (input.isEmpty()) break; // 檢查是否為空字串
+            if (len > input.length()) break; // 防止越界
+
+            String pattern = input.substring(0, len); // 當前字串模式
+            int count = 0;
+
+            for (int i = 0; i <= n - len; i += len) {
+                if (input.startsWith(pattern, i)) {
+                    count++;
+                } else {
+                    break;
+                }
+            }
+
+            if (count > 1 && !repeatedPatterns.contains(pattern)) {
+                repeatedPatterns.add(pattern);
+                input = input.replace(pattern.repeat(count), ""); // 移除已匹配的部分
+            }
+        }
+
+        return repeatedPatterns;
     }
 }

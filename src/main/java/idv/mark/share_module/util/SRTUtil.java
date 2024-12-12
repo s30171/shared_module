@@ -93,7 +93,7 @@ public class SRTUtil {
             sb.append(srtModel.getSequence()).append("\n");
             sb.append(srtModel.getTime()).append("\n");
             sb.append(srtModel.getText()).append("\n");
-            sb.append(srtModel.getLineBreak()).append("\n");
+            sb.append("\n");
         }
         return sb.toString();
     }
@@ -119,6 +119,9 @@ public class SRTUtil {
         srtModel.resetIfHallucination();
         srtModel.replaceSpecialCharacter();
         srtModel.swapTimeCheck();
+        srtModel.compressString();
+        srtModel.repeatedSubstringPattern();
+        srtModel.compressString();
         return srtModel;
     }
 
