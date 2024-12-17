@@ -21,36 +21,48 @@ public class SRTModel {
 
     // 判斷幻覺輸出
     public void resetIfHallucination() {
-        if (StringUtils.isAllBlank(this.text)) {
-            return;
+        try {
+            if (StringUtils.isAllBlank(this.text)) {
+                return;
+            }
+            this.text = filterRepeatedPhrases(this.text);
+            this.text = filterLongTimeStampHallucination(this.time, this.text);
+        } catch (Exception e) {
+            System.out.println("resetIfHallucination error: " + e + ", text: " + this.text);
         }
-        this.text = filterRepeatedPhrases(this.text);
-        this.text = filterLongTimeStampHallucination(this.time, this.text);
     }
 
     // 移除特殊字元
     public void replaceSpecialCharacter() {
-        if (StringUtils.isAllBlank(this.text)) {
-            return;
+        try {
+            if (StringUtils.isAllBlank(this.text)) {
+                return;
+            }
+            this.text = this.text.replace("�", "");
+            this.text = this.text.trim();
+        } catch (Exception e) {
+            System.out.println("replaceSpecialCharacter error: " + e + ", text: " + this.text);
         }
-        this.text = this.text.replace("�", "");
-        this.text = this.text.trim();
     }
 
     // 時間軸錯亂對調
     public void swapTimeCheck() {
-        if (StringUtils.isAllBlank(this.time)) {
-            return;
-        }
-        String[] timeArray = this.time.split(" --> ");
-        if (timeArray.length != 2) {
-            return;
-        }
-        long startTimeSec = convertToMillis(timeArray[0]);
-        long endTimeSec = convertToMillis(timeArray[1]);
-        if (startTimeSec > endTimeSec) {
-            System.out.println("時間軸錯亂對調 swapTime: " + this.time);
-            this.time = timeArray[1] + " --> " + timeArray[0];
+        try {
+            if (StringUtils.isAllBlank(this.time)) {
+                return;
+            }
+            String[] timeArray = this.time.split(" --> ");
+            if (timeArray.length != 2) {
+                return;
+            }
+            long startTimeSec = convertToMillis(timeArray[0]);
+            long endTimeSec = convertToMillis(timeArray[1]);
+            if (startTimeSec > endTimeSec) {
+                System.out.println("時間軸錯亂對調 swapTime: " + this.time);
+                this.time = timeArray[1] + " --> " + timeArray[0];
+            }
+        } catch (Exception e) {
+            System.out.println("swapTimeCheck error: " + e + ", time: " + this.time);
         }
     }
 
