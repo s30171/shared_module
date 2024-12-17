@@ -157,78 +157,86 @@ public class SRTModel {
     }
 
     public void repeatedSubstringPattern() {
-        if (StringUtils.isAllBlank(this.text) || this.text.length() < COMPRESS_STRING_LENGTH_LIMIT) {
-            return;
-        }
-        String s = this.text;
-        int n = s.length();
+        try {
+            if (StringUtils.isAllBlank(this.text) || this.text.length() < COMPRESS_STRING_LENGTH_LIMIT) {
+                return;
+            }
+            String s = this.text;
+            int n = s.length();
 
-        // 使用滑動視窗檢查所有可能的子字串長度
-        for (int len = 1; len <= n / 2; len++) {
-            // 取出子字串並進行匹配檢查
-            String substring = s.substring(0, len);
-            boolean match = true;
+            // 使用滑動視窗檢查所有可能的子字串長度
+            for (int len = 1; len <= n / 2; len++) {
+                // 取出子字串並進行匹配檢查
+                String substring = s.substring(0, len);
+                boolean match = true;
 
-            // 檢查所有長度為 len 的子字串是否一致
-            for (int i = 0; i + len <= n; i += len) {
-                if (!s.substring(i, i + len).equals(substring)) {
-                    match = false;
-                    break;
+                // 檢查所有長度為 len 的子字串是否一致
+                for (int i = 0; i + len <= n; i += len) {
+                    if (!s.substring(i, i + len).equals(substring)) {
+                        match = false;
+                        break;
+                    }
+                }
+
+                // 檢查剩餘部分是否與子字串的開頭一致
+                if (match && n % len != 0) {
+                    String remainingPart = s.substring(n - n % len);
+                    if (!substring.startsWith(remainingPart)) {
+                        match = false;
+                    }
+                }
+
+                if (match) {
+                    // 若匹配，返回去除重複的子字串
+                    this.text = substring;
+                    System.out.printf("repeatedSubstringPattern[%s], text:[%s] -> substring:[%s]\n", sequence, this.text, substring);
                 }
             }
-
-            // 檢查剩餘部分是否與子字串的開頭一致
-            if (match && n % len != 0) {
-                String remainingPart = s.substring(n - n % len);
-                if (!substring.startsWith(remainingPart)) {
-                    match = false;
-                }
-            }
-
-            if (match) {
-                // 若匹配，返回去除重複的子字串
-                this.text = substring;
-                System.out.printf("repeatedSubstringPattern[%s], text:[%s] -> substring:[%s]\n", sequence, this.text, substring);
-            }
+        } catch (Exception e) {
+            System.out.println("repeatedSubstringPattern error: " + e + ", text: " + this.text);
         }
     }
 
     // 壓縮整個字串
     public void compressString() {
-        if (StringUtils.isAllBlank(this.text) || this.text.length() < COMPRESS_STRING_LENGTH_LIMIT) {
-            return;
-        }
-        if (!checkRepeat()) {
-            return;
-        }
+        try {
+            if (StringUtils.isAllBlank(this.text) || this.text.length() < COMPRESS_STRING_LENGTH_LIMIT) {
+                return;
+            }
+            if (!checkRepeat()) {
+                return;
+            }
 
-        StringBuilder result = new StringBuilder();
-        String remainingInput = this.text;
-        if (StringUtils.isAllBlank(remainingInput)) {
-            return;
-        }
+            StringBuilder result = new StringBuilder();
+            String remainingInput = this.text;
+            if (StringUtils.isAllBlank(remainingInput)) {
+                return;
+            }
 
-        while (!remainingInput.isEmpty()) {
-            List<String> patterns = detectRepeatedPatterns(remainingInput);
+            while (!remainingInput.isEmpty()) {
+                List<String> patterns = detectRepeatedPatterns(remainingInput);
 
-            // 壓縮每個模式
-            for (String pattern : patterns) {
-                int count = 0;
-                while (remainingInput.startsWith(pattern)) {
-                    count++;
-                    remainingInput = remainingInput.substring(pattern.length());
+                // 壓縮每個模式
+                for (String pattern : patterns) {
+                    int count = 0;
+                    while (remainingInput.startsWith(pattern)) {
+                        count++;
+                        remainingInput = remainingInput.substring(pattern.length());
+                    }
+                    result.append(pattern);
+                    System.out.printf("compressString[%s], text:[%s] -> substring:[%s]\n", this.sequence, this.text, pattern);
                 }
-                result.append(pattern);
-                System.out.printf("compressString[%s], text:[%s] -> substring:[%s]\n", this.sequence, this.text, pattern);
-            }
 
-            // 處理無法再壓縮的部分
-            if (!remainingInput.isEmpty() && detectRepeatedPatterns(remainingInput).isEmpty()) {
-                result.append(remainingInput.charAt(0));
-                remainingInput = remainingInput.substring(1);
+                // 處理無法再壓縮的部分
+                if (!remainingInput.isEmpty() && detectRepeatedPatterns(remainingInput).isEmpty()) {
+                    result.append(remainingInput.charAt(0));
+                    remainingInput = remainingInput.substring(1);
+                }
             }
+            this.text = result.toString();
+        } catch (Exception e) {
+            System.out.println("compressString error: " + e + ", text: " + this.text);
         }
-        this.text = result.toString();
     }
 
     // 找出字串中的重複模式
