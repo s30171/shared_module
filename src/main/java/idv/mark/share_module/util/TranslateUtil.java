@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -57,21 +58,13 @@ public class TranslateUtil {
     }
 
     public TranslateModel translateByGPT(Double gptTemperature, String modelName, SpecialConvertEnum specialConvertEnum, LanguageEnum sourceLanguageEnum, LanguageEnum targetLanguageEnum, String translateString) {
-        TranslateModel request = new TranslateModel();
-        if (specialConvertEnum != null) {
-            request.setSpecialConvert(specialConvertEnum);
-        }
-        if (StringUtils.isNotBlank(modelName)) {
-            request.setGptModelName(modelName);
-        }
-        if (gptTemperature != null) {
-            request.setGptTemperature(gptTemperature);
-        }
-        request.setSourceLanguage(sourceLanguageEnum);
-        request.setSourceText(translateString);
-        request.setTargetLanguage(targetLanguageEnum);
-        request.setTranslateSource(TranslateSourceEnum.ChatGPT);
+        TranslateModel request = getTranslateByGPTRequest(gptTemperature, modelName, null, specialConvertEnum, sourceLanguageEnum, targetLanguageEnum, translateString);
         return translate(request);
+    }
+
+    public TranslateModel translateByGPTSRT(Double gptTemperature, String modelName, SpecialConvertEnum specialConvertEnum, LanguageEnum sourceLanguageEnum, LanguageEnum targetLanguageEnum, String translateString) {
+        TranslateModel translateByGPTRequest = getTranslateByGPTRequest(gptTemperature, modelName, TranslateSourceEnum.ChatGPT_SRT, specialConvertEnum, sourceLanguageEnum, targetLanguageEnum, translateString);
+        return translate(translateByGPTRequest);
     }
 
     // 偵測字幕語言
@@ -86,5 +79,23 @@ public class TranslateUtil {
         ResponseEntity<String> responseEntity = ConfigHelper.getBean(ChatGPTUtil.class).promptWithReq(prompt);
         String replace = responseEntity.getBody().replace("{", "").replace("}", "");
         return LanguageEnum.getByISOCode(replace);
+    }
+
+    private TranslateModel getTranslateByGPTRequest(Double gptTemperature, String modelName, TranslateSourceEnum translateSourceEnum, SpecialConvertEnum specialConvertEnum, LanguageEnum sourceLanguageEnum, LanguageEnum targetLanguageEnum, String translateString) {
+        TranslateModel request = new TranslateModel();
+        if (specialConvertEnum != null) {
+            request.setSpecialConvert(specialConvertEnum);
+        }
+        if (StringUtils.isNotBlank(modelName)) {
+            request.setGptModelName(modelName);
+        }
+        if (gptTemperature != null) {
+            request.setGptTemperature(gptTemperature);
+        }
+        request.setSourceLanguage(sourceLanguageEnum);
+        request.setSourceText(translateString);
+        request.setTargetLanguage(targetLanguageEnum);
+        request.setTranslateSource(Objects.isNull(translateSourceEnum) ? TranslateSourceEnum.ChatGPT : translateSourceEnum);
+        return request;
     }
 }
