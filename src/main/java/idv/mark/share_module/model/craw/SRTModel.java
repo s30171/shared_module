@@ -29,6 +29,7 @@ public class SRTModel {
             this.text = filterLongTimeStampHallucination(this.time, this.text);
         } catch (Exception e) {
             System.out.println("resetIfHallucination error: " + e + ", text: " + this.text);
+            throw e;
         }
     }
 
@@ -42,6 +43,7 @@ public class SRTModel {
             this.text = this.text.trim();
         } catch (Exception e) {
             System.out.println("replaceSpecialCharacter error: " + e + ", text: " + this.text);
+            throw e;
         }
     }
 
@@ -63,6 +65,7 @@ public class SRTModel {
             }
         } catch (Exception e) {
             System.out.println("swapTimeCheck error: " + e + ", time: " + this.time);
+            throw e;
         }
     }
 
@@ -206,6 +209,7 @@ public class SRTModel {
             }
         } catch (Exception e) {
             System.out.println("repeatedSubstringPattern error: " + e + ", text: " + this.text);
+            throw e;
         }
     }
 
@@ -248,6 +252,7 @@ public class SRTModel {
             this.text = result.toString();
         } catch (Exception e) {
             System.out.println("compressString error: " + e + ", text: " + this.text);
+            throw e;
         }
     }
 
