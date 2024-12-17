@@ -116,7 +116,7 @@ public class SRTUtil {
             text = text.substring(0, text.length() - 1);
         }
         SRTModel srtModel = new SRTModel(Integer.parseInt(block.get(0)), block.get(1), text, "\n");
-        srtModel.resetIfHallucination();
+//        srtModel.resetIfHallucination();
         srtModel.replaceSpecialCharacter();
         srtModel.swapTimeCheck();
         srtModel.compressString();
