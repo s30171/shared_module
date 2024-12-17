@@ -25,11 +25,9 @@ public class SRTModel {
             if (StringUtils.isAllBlank(this.text)) {
                 return;
             }
-            this.text = filterRepeatedPhrases(this.text);
             this.text = filterLongTimeStampHallucination(this.time, this.text);
         } catch (Exception e) {
             System.out.println("resetIfHallucination error: " + e + ", text: " + this.text);
-            throw e;
         }
     }
 
