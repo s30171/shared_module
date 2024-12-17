@@ -9,5 +9,6 @@ public enum TranslateSourceEnum {
     Azure,
     Google,
     ChatGPT,
+    ChatGPT_SRT,
     ;
 }
