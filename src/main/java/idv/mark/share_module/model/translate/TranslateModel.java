@@ -3,12 +3,18 @@ package idv.mark.share_module.model.translate;
 import idv.mark.share_module._enum.LanguageEnum;
 import idv.mark.share_module._enum.TranslateSourceSetting;
 import idv.mark.share_module.model.craw.SRTModel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TranslateModel {
     private String sourceText;
     private LanguageEnum sourceLanguage;
