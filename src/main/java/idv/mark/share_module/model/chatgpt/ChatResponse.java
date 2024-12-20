@@ -1,10 +1,14 @@
 package idv.mark.share_module.model.chatgpt;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChatResponse {
     private String id;
     private String object;
