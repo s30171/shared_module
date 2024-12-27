@@ -125,7 +125,7 @@ public class SRTUtil {
         return srtModel;
     }
 
-    private static void resetBlockSequence(List<SRTModel> srtModels) {
+    public static void resetBlockSequence(List<SRTModel> srtModels) {
         if (CollectionUtils.isEmpty(srtModels)) {
             return;
         }
