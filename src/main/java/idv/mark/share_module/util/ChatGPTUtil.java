@@ -53,21 +53,25 @@ public class ChatGPTUtil {
     }
 
     public ResponseEntity<String> promptWithReq(String model, String systemPrompt, String userPrompt, double temperature) {
+        return promptWithReq(model, systemPrompt, userPrompt, temperature, true);
+    }
+
+    public ResponseEntity<String> promptWithReq(String model, String systemPrompt, String userPrompt, double temperature, boolean printLog) {
         if (StringUtils.isNotBlank(systemPrompt)) {
             if (systemPrompt.length() > 100) {
                 String showSystemPrompt = systemPrompt.substring(0, 100) + "...";
                 showSystemPrompt += systemPrompt.substring(systemPrompt.length() - 100);
-                log.info("systemPrompt: {}", showSystemPrompt);
+                printLog(String.format("systemPrompt: %s", showSystemPrompt), printLog);
             } else {
-                log.info("systemPrompt: {}", systemPrompt);
+                printLog(String.format("systemPrompt: %s", systemPrompt), printLog);
             }
         }
         if (userPrompt.length() > 100) {
             String showPromptText = userPrompt.substring(0, 100) + "...";
             showPromptText += userPrompt.substring(userPrompt.length() - 100);
-            log.info("promptText: {}", showPromptText);
+            printLog(String.format("promptText: %s", showPromptText), printLog);
         } else {
-            log.info("promptText: {}", userPrompt);
+            printLog(String.format("promptText: %s", userPrompt), printLog);
         }
 
         LLMPromptRequest request = new LLMPromptRequest(model, systemPrompt, userPrompt, temperature, ConfigHelper.getBean(RemoteApiUrlConfig.class).getPass());
@@ -77,11 +81,17 @@ public class ChatGPTUtil {
         if (body != null && body.length() > 100) {
             String showBody = body.substring(0, 100) + "...";
             showBody += body.substring(body.length() - 100);
-            log.info("ChatResponse: {}", showBody);
+            printLog(String.format("ChatResponse: %s", showBody), printLog);
         } else {
-            log.info("ChatResponse: {}", body);
+            printLog(String.format("ChatResponse: %s", body), printLog);
         }
         return response;
+    }
+
+    private void printLog(String showSystemPrompt, boolean printLog) {
+        if (printLog) {
+            log.info("systemPrompt: {}", showSystemPrompt);
+        }
     }
 
     public ResponseEntity<String> promptWithReq(String model, String userPrompt) {
