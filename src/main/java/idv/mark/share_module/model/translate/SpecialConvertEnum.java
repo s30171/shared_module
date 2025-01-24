@@ -9,5 +9,6 @@ public enum SpecialConvertEnum {
     tripleS,
     tripleSKR,
     tripleSEN,
-    SMOOTHLY
+    tripleS_SMOOTHLY,
+    SMOOTHLY,
 }
