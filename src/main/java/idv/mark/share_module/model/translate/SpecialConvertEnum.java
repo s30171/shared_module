@@ -11,4 +11,5 @@ public enum SpecialConvertEnum {
     tripleSEN,
     tripleS_SMOOTHLY,
     SMOOTHLY,
+    DEFAULT_TRANSLATE,
 }
