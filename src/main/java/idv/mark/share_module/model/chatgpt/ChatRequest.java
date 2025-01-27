@@ -1,5 +1,6 @@
 package idv.mark.share_module.model.chatgpt;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,6 +14,7 @@ public class ChatRequest {
     private List<Message> messages;
     private int n;
     private double temperature = 0.3;
+    @JsonProperty("response_format")
     private Map<String, Object> responseFormat;
 
     public ChatRequest(String model, String prompt, int n) {
