@@ -7,9 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -24,6 +26,28 @@ public class TranslateModel {
     private SpecialConvertEnum specialConvert;
     private LanguageEnum targetLanguage;
     private String targetText;
+
+    public TranslateModel(Double gptTemperature,
+                          String modelName,
+                          TranslateSourceEnum translateSourceEnum,
+                          SpecialConvertEnum specialConvertEnum,
+                          LanguageEnum sourceLanguageEnum,
+                          LanguageEnum targetLanguageEnum,
+                          String translateString) {
+        if (specialConvertEnum != null) {
+            this.specialConvert = specialConvertEnum;
+        }
+        if (StringUtils.isNotBlank(modelName)) {
+            this.gptModelName = modelName;
+        }
+        if (gptTemperature != null) {
+            this.gptTemperature = gptTemperature;
+        }
+        this.sourceLanguage = sourceLanguageEnum;
+        this.sourceText = translateString;
+        this.targetLanguage = targetLanguageEnum;
+        this.translateSource = Objects.isNull(translateSourceEnum) ? TranslateSourceEnum.ChatGPT : translateSourceEnum;
+    }
 
     public void setBySRTModel(List<SRTModel> srtModels) {
         if (CollectionUtils.isEmpty(srtModels)) {
