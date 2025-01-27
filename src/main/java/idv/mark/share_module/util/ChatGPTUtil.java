@@ -2,9 +2,9 @@ package idv.mark.share_module.util;
 
 import idv.mark.share_module.config.ConfigHelper;
 import idv.mark.share_module.config.RemoteApiUrlConfig;
-import idv.mark.share_module.model.chatgpt.LLMPromptRequest;
 import idv.mark.share_module.model.chatgpt.ChatRequest;
 import idv.mark.share_module.model.chatgpt.ChatResponse;
+import idv.mark.share_module.model.chatgpt.LLMPromptRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +14,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -53,10 +55,9 @@ public class ChatGPTUtil {
     }
 
     public ResponseEntity<String> promptWithReq(String model, String systemPrompt, String userPrompt, double temperature) {
-        return promptWithReq(model, systemPrompt, userPrompt, temperature, true);
+        return promptWithReq(model, systemPrompt, userPrompt, temperature, null, true);
     }
-
-    public ResponseEntity<String> promptWithReq(String model, String systemPrompt, String userPrompt, double temperature, boolean printLog) {
+    public ResponseEntity<String> promptWithReq(String model, String systemPrompt, String userPrompt, double temperature, Map<String, Object> responseFormat,  boolean printLog) {
         if (StringUtils.isNotBlank(systemPrompt)) {
             if (systemPrompt.length() > 100) {
                 String showSystemPrompt = systemPrompt.substring(0, 100) + "...";
@@ -74,7 +75,7 @@ public class ChatGPTUtil {
             printLog(String.format("promptText: %s", userPrompt), printLog);
         }
 
-        LLMPromptRequest request = new LLMPromptRequest(model, systemPrompt, userPrompt, temperature, ConfigHelper.getBean(RemoteApiUrlConfig.class).getPass());
+        LLMPromptRequest request = new LLMPromptRequest(model, systemPrompt, userPrompt, temperature, ConfigHelper.getBean(RemoteApiUrlConfig.class).getPass(), responseFormat);
         String url = String.format("%s/api/prompt", ConfigHelper.getBean(RemoteApiUrlConfig.class).getCrawUrl());
         ResponseEntity<String> response = ConfigHelper.getBean(RestTemplate.class).postForEntity(url, request, String.class);
         String body = response.getBody();
@@ -86,6 +87,10 @@ public class ChatGPTUtil {
             printLog(String.format("ChatResponse: %s", body), printLog);
         }
         return response;
+    }
+
+    public ResponseEntity<String> promptWithReq(String model, String systemPrompt, String userPrompt, double temperature, boolean printLog) {
+        return promptWithReq(model, systemPrompt, userPrompt, temperature, null, printLog);
     }
 
     private void printLog(String showSystemPrompt, boolean printLog) {
@@ -103,6 +108,6 @@ public class ChatGPTUtil {
     }
 
     public ResponseEntity<String> promptWithReq(LLMPromptRequest request) {
-        return promptWithReq(request.getModel(), request.getSystemPrompt(), request.getPostBody(), request.getTemperature());
+        return promptWithReq(request.getModel(), request.getSystemPrompt(), request.getPostBody(), request.getTemperature(), request.getResponseFormat(), true);
     }
 }
