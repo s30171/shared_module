@@ -63,7 +63,7 @@ public class ChatRequest {
         // 如果模型是 o1 或 o3，則不傳送 temperature
         if (model.contains("o1") || model.contains("o3")) {
             return null;
-        } 
+        }
         return temperature;
     }
 }
