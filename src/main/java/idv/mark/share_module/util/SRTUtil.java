@@ -120,6 +120,7 @@ public class SRTUtil {
         srtModel.replaceSpecialCharacter();
         srtModel.swapTimeCheck();
         srtModel.compressString();
+        srtModel.compressRepeatedWord();
         srtModel.repeatedSubstringPattern();
         srtModel.compressString();
         return srtModel;

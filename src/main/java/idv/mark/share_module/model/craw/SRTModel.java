@@ -282,4 +282,55 @@ public class SRTModel {
 
         return repeatedPatterns;
     }
+    // 壓縮每個單字裡面重複的部分（依空格切割）
+    public void compressRepeatedWord() {
+        try {
+            if (StringUtils.isAllBlank(this.text)) {
+                return;
+            }
+            String[] words = this.text.split(" ");
+            for (int i = 0; i < words.length; i++) {
+                String originalWord = words[i];
+                words[i] = compressRepeatedToken(words[i]);
+                if (!originalWord.equals(words[i])) {
+                    System.out.printf("compressRepeatedWord: [%s] -> [%s]\n", originalWord, words[i]);
+                }
+            }
+            this.text = String.join(" ", words);
+        } catch (Exception e) {
+            System.out.println("compressRepeatedWord error: " + e + ", text: " + this.text);
+            throw e;
+        }
+    }
+
+    // 檢查單一字串是否由重複子字串組成，若重複次數 >= 4 則回傳最小子字串，否則回傳原字串
+    private static String compressRepeatedToken(String token) {
+        int n = token.length();
+        if (n <= 1) {
+            return token;
+        }
+        // 嘗試所有可能的子字串長度
+        for (int len = 1; len <= n / 2; len++) {
+            // 只有當整個 token 長度能整除子字串長度時才檢查
+            if (n % len == 0) {
+                int count = n / len;
+                // 只有重複次數達 4 次以上才進行壓縮
+                if (count < 4) {
+                    continue;
+                }
+                String pattern = token.substring(0, len);
+                boolean match = true;
+                for (int i = 0; i < n; i += len) {
+                    if (!token.substring(i, i + len).equals(pattern)) {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match) {
+                    return pattern;
+                }
+            }
+        }
+        return token;
+    }
 }
