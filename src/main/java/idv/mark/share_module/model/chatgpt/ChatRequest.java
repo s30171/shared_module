@@ -1,5 +1,7 @@
 package idv.mark.share_module.model.chatgpt;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +15,7 @@ public class ChatRequest {
     private String model;
     private List<Message> messages;
     private int n;
-    private double temperature = 0.3;
+    private double temperature = 0;
     @JsonProperty("response_format")
     private Map<String, Object> responseFormat;
 
@@ -51,5 +53,17 @@ public class ChatRequest {
         if (responseFormat != null) {
             this.responseFormat = responseFormat;
         }
+    }
+
+
+    // 使用 @JsonGetter 並搭配 @JsonInclude 當回傳 null 時不序列化該 key
+    @JsonGetter("temperature")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public Double getTemperature() {
+        // 如果模型是 o1 或 o3，則不傳送 temperature
+        if (model.contains("o1") || model.contains("o3")) {
+            return null;
+        }
+        return temperature;
     }
 }
