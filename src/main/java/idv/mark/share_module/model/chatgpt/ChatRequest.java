@@ -18,6 +18,8 @@ public class ChatRequest {
     private double temperature = 0;
     @JsonProperty("response_format")
     private Map<String, Object> responseFormat;
+    @JsonProperty("max_tokens")
+    private Integer maxTokens = 1000;
 
     public ChatRequest(String model, String prompt, int n) {
         this.model = model;
