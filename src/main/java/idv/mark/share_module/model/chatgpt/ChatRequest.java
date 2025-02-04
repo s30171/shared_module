@@ -19,7 +19,7 @@ public class ChatRequest {
     @JsonProperty("response_format")
     private Map<String, Object> responseFormat;
     @JsonProperty("max_tokens")
-    private Integer maxTokens = 1000;
+    private Integer maxTokens = 1300;
 
     public ChatRequest(String model, String prompt, int n) {
         this.model = model;
@@ -67,5 +67,15 @@ public class ChatRequest {
             return null;
         }
         return temperature;
+    }
+
+    @JsonGetter("max_tokens")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public Integer getMaxTokens() {
+        // 如果模型是 o1 或 o3，則不傳送 temperature
+        if (model.contains("o1") || model.contains("o3")) {
+            return null;
+        }
+        return maxTokens;
     }
 }
