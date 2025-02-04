@@ -76,6 +76,7 @@ public class ChatRequest {
         if (model.contains("o1") || model.contains("o3")) {
             return null;
         }
+
         return maxTokens;
     }
 }
