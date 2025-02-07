@@ -11,6 +11,9 @@ public enum LanguageEnum {
     JAPANESE("JA"),
     KOREAN("KO"),
     THAI("TH"),
+    VIETNAMESE("VI"),
+    INDONESIAN("ID"),
+    SPANISH("ES"),
     ;
     private String code;
 
