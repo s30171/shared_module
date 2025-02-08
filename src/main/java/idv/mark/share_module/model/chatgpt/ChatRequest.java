@@ -19,7 +19,7 @@ public class ChatRequest {
     @JsonProperty("response_format")
     private Map<String, Object> responseFormat;
     @JsonProperty("max_tokens")
-    private Integer maxTokens = 1300;
+    private Integer maxTokens = 2000;
 
     public ChatRequest(String model, String prompt, int n) {
         this.model = model;
