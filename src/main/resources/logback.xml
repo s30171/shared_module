@@ -30,7 +30,7 @@
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
-        <destination>107.175.63.239:5044</destination>
+        <destination>${ELASTIC_IP}:5044</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <customFields>{"appName":"${APP_NAME}"}</customFields>
         </encoder>

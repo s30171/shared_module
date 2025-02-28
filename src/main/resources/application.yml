@@ -4,3 +4,5 @@ spring:
   main:
     listeners:
         org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent: idv.mark.share_module.config.LogbackContextInitializer
+elastic:
+  ip: 107.175.63.239
