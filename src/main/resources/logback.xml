@@ -1,6 +1,10 @@
 <configuration>
 
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
+    <springProperty scope="context"
+                    name="ELASTIC_IP"
+                    source="elastic.ip"
+                    defaultValue="107.175.63.239"/>
 
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] [%X{traceId}] %-5level %logger{36} - %msg%n"/>
 
