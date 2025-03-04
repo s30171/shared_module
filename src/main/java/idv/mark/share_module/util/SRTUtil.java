@@ -78,9 +78,9 @@ public class SRTUtil {
                 }
             }
         }
-        resetBlockSequence(srtModels);
-
-        return srtModels;
+        List<SRTModel> srtModelList = removeIfEmpty(srtModels);
+        resetBlockSequence(srtModelList);
+        return srtModelList;
     }
 
     // 將SRTModel轉換為SRT文字
@@ -135,5 +135,9 @@ public class SRTUtil {
         for (SRTModel srtModel : srtModels) {
             srtModel.setSequence(sequence++);
         }
+    }
+
+    private static List<SRTModel> removeIfEmpty(List<SRTModel> srtModels) {
+        return srtModels.stream().filter(srtModel -> StringUtils.isNotBlank(srtModel.getText())).collect(Collectors.toList());
     }
 }
