@@ -15,6 +15,18 @@ import java.util.stream.Collectors;
 
 public class SRTUtil {
 
+    private static final char[] PUNCTUATION = {',', '.', '!', '?', '。', '，', '、', ';', '；'};
+    private static final List<String> REMOVED_PUNCTUATION = new ArrayList<>(){{
+        add(",");
+        add(".");
+        add("。");
+        add("，");
+        add("、");
+        add(";");
+        add("；");
+    }};
+
+
     public static List<SRTModel> srtFileToSRTModel(File file) {
         try {
             String fileText = FileUtils.readFileToString(file, "UTF-8");
@@ -149,9 +161,8 @@ public class SRTUtil {
         int bestDistance = sentence.length();
 
         // 若未找到逗號，再尋找其他常用標點符號
-        char[] punctuation = {',', '.', '!', '?', '。', '，', '、', ';', '；'};
         for (int i = 0; i < copySentence.length(); i++) {
-            for (char p : punctuation) {
+            for (char p : PUNCTUATION) {
                 if (copySentence.charAt(i) == p) {
                     int distance = Math.abs(i - mid);
                     if (distance < bestDistance) {
@@ -167,8 +178,11 @@ public class SRTUtil {
             return sentence;
         }
 
-        // 切割字串，保留標點符號在前一段的結尾
+        // 切割字串，保留特定標點符號在前一段的結尾
         String firstPart = copySentence.substring(0, bestIndex + 1).trim();
+        if (REMOVED_PUNCTUATION.contains(firstPart.substring(firstPart.length() - 1))) {
+            firstPart = firstPart.substring(0, firstPart.length() - 1);
+        }
         String secondPart = copySentence.substring(bestIndex + 1).trim();
 
         return StringUtils.isAllBlank(secondPart) ?  firstPart : firstPart + "\n" + secondPart;
