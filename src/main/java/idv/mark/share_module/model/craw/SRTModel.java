@@ -5,8 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -282,8 +281,10 @@ public class SRTModel {
 
         return repeatedPatterns;
     }
+
     // 壓縮每個單字裡面重複的部分（依空格切割）
     public void compressRepeatedWord() {
+        String originalText = this.text;
         try {
             if (StringUtils.isAllBlank(this.text)) {
                 return;
@@ -297,6 +298,52 @@ public class SRTModel {
                 }
             }
             this.text = String.join(" ", words);
+
+            // 第二層判斷, 判斷單字是否高度重複
+            if (this.text.length() > COMPRESS_STRING_LENGTH_LIMIT) {
+                int totalTokens = words.length;
+                Map<String, Integer> countMap = new HashMap<>();
+                for (String token : words) {
+                    countMap.put(token, countMap.getOrDefault(token, 0) + 1);
+                }
+
+                // 2. 計算出現率並存入 Map<String, Double>
+                Map<String, Double> frequencyMap = new HashMap<>();
+                for (Map.Entry<String, Integer> entry : countMap.entrySet()) {
+                    double frequency = (double) entry.getValue() / totalTokens;
+                    frequencyMap.put(entry.getKey(), frequency);
+                }
+
+                // 設定門檻值（例如：90%）
+                double threshold = 0.9;
+                // 找出出現率大於或等於門檻的單字
+                Set<String> highFrequencyWords = new HashSet<>();
+                for (Map.Entry<String, Double> entry : frequencyMap.entrySet()) {
+                    if (entry.getValue() >= threshold) {
+                        highFrequencyWords.add(entry.getKey());
+                    }
+                }
+
+                // 濾除這些高度重複的單字
+                // 依照要求：第一次出現保留，後續出現則濾除
+                Set<String> addedHighFrequency = new HashSet<>();
+                StringBuilder filteredText = new StringBuilder();
+                for (String token : words) {
+                    if (highFrequencyWords.contains(token)) {
+                        if (!addedHighFrequency.contains(token)) {
+                            filteredText.append(token).append(" ");
+                            addedHighFrequency.add(token);
+                        }
+                        // 已經出現過的高頻單字就跳過不加入
+                    } else {
+                        filteredText.append(token).append(" ");
+                    }
+                }
+                this.text = filteredText.toString().trim();
+                if (!StringUtils.equals(originalText, this.text)) {
+                    System.out.printf("compressRepeatedWord highFrequency: [%s] -> [%s]\n", originalText, this.text);
+                }
+            }
         } catch (Exception e) {
             System.out.println("compressRepeatedWord error: " + e + ", text: " + this.text);
             throw e;
