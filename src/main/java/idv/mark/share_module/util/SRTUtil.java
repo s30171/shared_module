@@ -103,6 +103,81 @@ public class SRTUtil {
         return CollectionUtils.isEmpty(srtModels) ? "" : srtModels.stream().map(SRTModel::getText).collect(Collectors.joining("\n"));
     }
 
+    public static void resetBlockSequence(List<SRTModel> srtModels) {
+        if (CollectionUtils.isEmpty(srtModels)) {
+            return;
+        }
+        srtModels = srtModels.stream().sorted((Comparator.comparing(SRTModel::getSequence))).collect(Collectors.toList());
+        int sequence = srtModels.get(0).getSequence();
+        for (SRTModel srtModel : srtModels) {
+            srtModel.setSequence(sequence++);
+        }
+    }
+
+    public static void reSizeTextTwoLine(List<SRTModel> srtModels, int size) {
+        if (CollectionUtils.isEmpty(srtModels)) {
+            return;
+        }
+        for (SRTModel srtModel : srtModels) {
+            String text = srtModel.getText();
+            if (StringUtils.isNotBlank(text) && text.length() > size && !text.contains("\n")) {
+                srtModel.setText(splitSentence(text, size));
+            }
+        }
+    }
+
+    /**
+     * 若字串長度超過 maxLength，則根據離字串中間最近的標點符號進行切割，
+     * 並優先選用英文逗號（,）作為切割點。
+     * 若找不到任何標點符號，則直接回傳原字串。
+     *
+     * @param sentence 要處理的句子
+     * @param maxLength 字串長度門檻
+     * @return 切割後的字串陣列（若切割成功則陣列長度為2，否則僅包含原句）
+     */
+    public static String splitSentence(String sentence, int maxLength) {
+        String copySentence = sentence;
+        if (sentence == null || sentence.length() <= maxLength) {
+            return sentence;
+        }
+        if (sentence.contains("\n")) {
+            copySentence = sentence.replace("\n", " ");
+        }
+
+        int mid = sentence.length() / 2;
+        int bestIndex = -1;
+        int bestDistance = sentence.length();
+
+        // 若未找到逗號，再尋找其他常用標點符號
+        char[] punctuation = {',', '.', '!', '?', '。', '，', '、', ';', '；'};
+        for (int i = 0; i < copySentence.length(); i++) {
+            for (char p : punctuation) {
+                if (copySentence.charAt(i) == p) {
+                    int distance = Math.abs(i - mid);
+                    if (distance < bestDistance) {
+                        bestDistance = distance;
+                        bestIndex = i;
+                    }
+                }
+            }
+        }
+
+        // 如果仍然找不到標點符號，則不切割，直接回傳原字串
+        if (bestIndex == -1) {
+            return sentence;
+        }
+
+        // 切割字串，保留標點符號在前一段的結尾
+        String firstPart = copySentence.substring(0, bestIndex + 1).trim();
+        String secondPart = copySentence.substring(bestIndex + 1).trim();
+
+        return StringUtils.isAllBlank(secondPart) ?  firstPart : firstPart + "\n" + secondPart;
+    }
+
+    private static List<SRTModel> removeIfEmpty(List<SRTModel> srtModels) {
+        return srtModels.stream().filter(srtModel -> StringUtils.isNotBlank(srtModel.getText())).collect(Collectors.toList());
+    }
+
     private static SRTModel convertBlockToSRTModel(List<String> block) {
         String text = "";
         if (block.size() <= 2) {
@@ -124,20 +199,5 @@ public class SRTUtil {
         srtModel.repeatedSubstringPattern();
         srtModel.compressString();
         return srtModel;
-    }
-
-    public static void resetBlockSequence(List<SRTModel> srtModels) {
-        if (CollectionUtils.isEmpty(srtModels)) {
-            return;
-        }
-        srtModels = srtModels.stream().sorted((Comparator.comparing(SRTModel::getSequence))).collect(Collectors.toList());
-        int sequence = srtModels.get(0).getSequence();
-        for (SRTModel srtModel : srtModels) {
-            srtModel.setSequence(sequence++);
-        }
-    }
-
-    private static List<SRTModel> removeIfEmpty(List<SRTModel> srtModels) {
-        return srtModels.stream().filter(srtModel -> StringUtils.isNotBlank(srtModel.getText())).collect(Collectors.toList());
     }
 }
