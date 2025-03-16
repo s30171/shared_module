@@ -10,5 +10,6 @@ public enum TranslateSourceEnum {
     Google,
     ChatGPT,
     ChatGPT_SRT,
+    Local_LLM
     ;
 }
