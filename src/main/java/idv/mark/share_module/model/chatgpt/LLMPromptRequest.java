@@ -10,7 +10,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 public class LLMPromptRequest {
-    private String model = "gpt-4o-mini";
+    private String model = "gpt-4.1-nano";
     private String systemPrompt;
     private String postBody;
     private String pass;
