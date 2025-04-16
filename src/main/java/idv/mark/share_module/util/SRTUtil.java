@@ -204,6 +204,8 @@ public class SRTUtil {
         if (text.endsWith("\n")) {
             text = text.substring(0, text.length() - 1);
         }
+        // 逗號標點優化：逗號後不是空白或換行時補空白
+        text = text.replaceAll(",(?![ \\n])", ", ");
         SRTModel srtModel = new SRTModel(Integer.parseInt(block.get(0)), block.get(1), text, "\n");
         srtModel.resetIfHallucination();
         srtModel.replaceSpecialCharacter();
@@ -212,6 +214,7 @@ public class SRTUtil {
         srtModel.compressRepeatedWord();
         srtModel.repeatedSubstringPattern();
         srtModel.compressString();
+        
         return srtModel;
     }
 }
