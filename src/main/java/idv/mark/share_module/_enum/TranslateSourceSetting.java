@@ -38,6 +38,8 @@ public enum TranslateSourceSetting {
         TranslateSourceEnum translateSourceEnum = null;
         for (TranslateSourceSetting setting : TranslateSourceSetting.values()) {
             LanguageEnum languageEnum = LanguageEnum.valueOf(setting.name());
+
+            // 失聯戶測試三
             // 偵測同語言設定
             if (!Objects.equals(sourceLanguage, languageEnum)) {
                 continue;

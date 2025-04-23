@@ -12,6 +12,8 @@ public class RestTemplateConfig {
 
     @Bean
     public RestTemplate getRestTemplate(RestTemplateBuilder builder) {
+        // 失聯戶測試4
+
         return builder.setConnectTimeout(Duration.ofSeconds(60))
                 .setReadTimeout(Duration.ofSeconds(60))
                 .build();
