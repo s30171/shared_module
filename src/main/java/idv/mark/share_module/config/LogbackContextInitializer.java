@@ -20,6 +20,9 @@ public class LogbackContextInitializer implements ApplicationListener<Applicatio
         properties.put("APP_NAME", appName);
         properties.put("appName", appName);
 
+        // 失聯戶測試22222
+
+
         MutablePropertySources propertySources = environment.getPropertySources();
         propertySources.addFirst(new PropertiesPropertySource("logbackConfig", properties));
     }
