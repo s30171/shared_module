@@ -11,4 +11,5 @@ public enum SpecialConvertEnum {
     tripleSEN,
     tripleS_SMOOTHLY,
     SMOOTHLY,
+    KPOPCAST_WAVIN,
 }
