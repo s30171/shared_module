@@ -23,12 +23,14 @@ public class TranslateModel {
     private TranslateSourceEnum translateSource;
     private String gptModelName;
     private double gptTemperature = 0.1;
+    private String systemPrompt;
     private SpecialConvertEnum specialConvert;
     private LanguageEnum targetLanguage;
     private String targetText;
 
     public TranslateModel(Double gptTemperature,
                           String modelName,
+                          String systemPrompt,
                           TranslateSourceEnum translateSourceEnum,
                           SpecialConvertEnum specialConvertEnum,
                           LanguageEnum sourceLanguageEnum,
@@ -42,6 +44,9 @@ public class TranslateModel {
         }
         if (gptTemperature != null) {
             this.gptTemperature = gptTemperature;
+        }
+        if (StringUtils.isNotBlank(systemPrompt)) {
+            this.systemPrompt = systemPrompt;
         }
         this.sourceLanguage = sourceLanguageEnum;
         this.sourceText = translateString;

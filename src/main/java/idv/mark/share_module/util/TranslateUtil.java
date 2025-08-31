@@ -55,9 +55,16 @@ public class TranslateUtil {
         return translate(request);
     }
 
-    public TranslateModel translateByGPT(Double gptTemperature, String modelName, SpecialConvertEnum specialConvertEnum, LanguageEnum sourceLanguageEnum, LanguageEnum targetLanguageEnum, String translateString) {
+    public TranslateModel translateByGPT(Double gptTemperature,
+                                         String modelName,
+                                         String systemPrompt,
+                                         SpecialConvertEnum specialConvertEnum,
+                                         LanguageEnum sourceLanguageEnum,
+                                         LanguageEnum targetLanguageEnum,
+                                         String translateString) {
         TranslateModel request = new TranslateModel(gptTemperature,
                 modelName,
+                systemPrompt,
                 null,
                 specialConvertEnum,
                 sourceLanguageEnum,
@@ -66,9 +73,16 @@ public class TranslateUtil {
         return translate(request);
     }
 
-    public TranslateModel translateByGPTSRT(Double gptTemperature, String modelName, SpecialConvertEnum specialConvertEnum, LanguageEnum sourceLanguageEnum, LanguageEnum targetLanguageEnum, String translateString) {
+    public TranslateModel translateByGPTSRT(Double gptTemperature,
+                                            String modelName,
+                                            String systemPrompt,
+                                            SpecialConvertEnum specialConvertEnum,
+                                            LanguageEnum sourceLanguageEnum,
+                                            LanguageEnum targetLanguageEnum,
+                                            String translateString) {
         TranslateModel translateModel = new TranslateModel(gptTemperature,
                 modelName,
+                systemPrompt,
                 TranslateSourceEnum.ChatGPT_SRT,
                 specialConvertEnum,
                 sourceLanguageEnum,
