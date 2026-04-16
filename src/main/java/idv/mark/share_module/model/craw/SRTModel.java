@@ -282,6 +282,59 @@ public class SRTModel {
         return repeatedPatterns;
     }
 
+    // 偵測字元過度連續重複的幻覺（例如「快快快...」、甚至混雜三種「呵呵...哈哈...啦啦...」）
+    public void filterConsecutiveCharHallucination() {
+        try {
+            if (StringUtils.isAllBlank(this.text) || this.text.length() < 10) {
+                return;
+            }
+
+            // 檢查是否有任何字元「連續」出現超過 8 次
+            boolean hasHallucination = false;
+            int currentConsecutive = 1;
+            char prevChar = this.text.charAt(0);
+            for (int i = 1; i < this.text.length(); i++) {
+                char c = this.text.charAt(i);
+                if (c == prevChar) {
+                    currentConsecutive++;
+                    if (currentConsecutive >= 8) {
+                        hasHallucination = true;
+                        break;
+                    }
+                } else {
+                    currentConsecutive = 1;
+                    prevChar = c;
+                }
+            }
+
+            if (hasHallucination) {
+                // 觸發幻覺偵測：壓縮所有連續重複超過 3 次的字元
+                String original = this.text;
+                StringBuilder result = new StringBuilder();
+                int consecutiveCount = 1;
+                result.append(this.text.charAt(0));
+                for (int i = 1; i < this.text.length(); i++) {
+                    char c = this.text.charAt(i);
+                    if (c == this.text.charAt(i - 1)) {
+                        consecutiveCount++;
+                        if (consecutiveCount <= 3) {
+                            result.append(c);
+                        }
+                    } else {
+                        consecutiveCount = 1;
+                        result.append(c);
+                    }
+                }
+                this.text = result.toString().trim();
+                if (!original.equals(this.text)) {
+                    System.out.printf("filterConsecutiveCharHallucination[%s]: [%s] -> [%s]%n", this.sequence, original, this.text);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("filterDominantCharHallucination error: " + e + ", text: " + this.text);
+        }
+    }
+
     // 壓縮每個單字裡面重複的部分（依空格切割）
     public void compressRepeatedWord() {
         String originalText = this.text;

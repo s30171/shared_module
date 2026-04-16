@@ -208,6 +208,7 @@ public class SRTUtil {
         text = text.replaceAll(",(?![ \\n])", ", ");
         SRTModel srtModel = new SRTModel(Integer.parseInt(block.get(0)), block.get(1), text, "\n");
         srtModel.resetIfHallucination();
+        srtModel.filterConsecutiveCharHallucination();
         srtModel.replaceSpecialCharacter();
         srtModel.swapTimeCheck();
         srtModel.compressString();
