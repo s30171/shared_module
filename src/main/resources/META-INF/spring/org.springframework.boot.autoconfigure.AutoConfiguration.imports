@@ -7,3 +7,10 @@ idv.mark.share_module.config.RemoteApiUrlConfig
 idv.mark.share_module.util.TranslateUtil
 idv.mark.share_module.util.ChatGPTUtil
 idv.mark.share_module.util.GrokUtil
+idv.mark.share_module.process.ProcessManager
+idv.mark.share_module.task.TaskService
+idv.mark.share_module.config.JpaConfig
+idv.mark.share_module.asr.ASRProviderRegistry
+idv.mark.share_module.asr.WhisperXProvider
+idv.mark.share_module.asr.InsanelyFastWhisperProvider
+idv.mark.share_module.asr.GeminiTranscribeProvider

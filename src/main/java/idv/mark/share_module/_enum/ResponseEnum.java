@@ -9,6 +9,7 @@ public enum ResponseEnum {
     FAIL("F000", "ERROR", 500),
     FILE_NOT_FOUND("F001", "File not found", 500),
     ENUM_SETTING_NOT_FOUND("F002", "Enum setting not found", 500),
+    INVALID_KEY("F003", "Invalid trigger key", 401),
     ;
 
     private String statusCode;

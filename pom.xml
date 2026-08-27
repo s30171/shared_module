@@ -118,6 +118,26 @@
 			<version>5.10.3</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Spring Data JPA for Task persistence -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+		<!-- H2 Database (provided - consumers supply at runtime) -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>2.2.224</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Google GenAI SDK for Gemini Transcribe (optional) -->
+		<dependency>
+			<groupId>com.google.genai</groupId>
+			<artifactId>google-genai</artifactId>
+			<version>1.68.0</version>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 
 	<build>
