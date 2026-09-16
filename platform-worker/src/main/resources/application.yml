@@ -1,0 +1,33 @@
+server:
+  port: ${WORKER_PORT:18086}
+  shutdown: graceful
+spring:
+  task:
+    scheduling:
+      pool:
+        size: 2
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+worker:
+  id: ${WORKER_ID:}
+  role: ${WORKER_ROLE:backup}
+  slots: ${WORKER_SLOTS:1}
+  control-url: ${CONTROL_URL:http://localhost:18085}
+  token: ${PLATFORM_WORKER_TOKEN:}
+  root: ${WORKER_ROOT:./data/worker}
+  demo: ${WORKER_DEMO:false}
+  ffmpeg: ${FFMPEG_BIN:ffmpeg}
+  ffprobe: ${FFPROBE_BIN:ffprobe}
+  yt-dlp: ${YT_DLP_BIN:yt-dlp}
+  ytarchive: ${YTARCHIVE_BIN:ytarchive}
+  whisperx: ${WHISPERX_BIN:whisperx}
+  insanely-fast-whisper: ${INSANELY_FAST_WHISPER_BIN:insanely-fast-whisper}
