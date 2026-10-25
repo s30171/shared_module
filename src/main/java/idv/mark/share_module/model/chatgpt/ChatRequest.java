@@ -58,12 +58,16 @@ public class ChatRequest {
     }
 
 
+    // 推理模型（o 系列、gpt-5 系列）不接受 temperature 與 max_tokens
+    private boolean isReasoningModel() {
+        return model.contains("o1") || model.contains("o3") || model.startsWith("o4") || model.startsWith("gpt-5");
+    }
+
     // 使用 @JsonGetter 並搭配 @JsonInclude 當回傳 null 時不序列化該 key
     @JsonGetter("temperature")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public Double getTemperature() {
-        // 如果模型是 o1 或 o3，則不傳送 temperature
-        if (model.contains("o1") || model.contains("o3")) {
+        if (isReasoningModel()) {
             return null;
         }
         return temperature;
@@ -72,11 +76,30 @@ public class ChatRequest {
     @JsonGetter("max_tokens")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public Integer getMaxTokens() {
-        // 如果模型是 o1 或 o3，則不傳送 temperature
-        if (model.contains("o1") || model.contains("o3")) {
+        if (isReasoningModel()) {
             return null;
         }
 
         return maxTokens;
+    }
+
+    // 推理模型的輸出上限包含推理 token，保留四倍空間避免譯文被截斷
+    @JsonGetter("max_completion_tokens")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public Integer getMaxCompletionTokens() {
+        if (!isReasoningModel() || maxTokens == null) {
+            return null;
+        }
+        return maxTokens * 4;
+    }
+
+    // 翻譯不需要深度推理，降低推理強度以節省費用與時間（o1 不支援此參數）
+    @JsonGetter("reasoning_effort")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public String getReasoningEffort() {
+        if (!isReasoningModel() || model.contains("o1")) {
+            return null;
+        }
+        return "low";
     }
 }
