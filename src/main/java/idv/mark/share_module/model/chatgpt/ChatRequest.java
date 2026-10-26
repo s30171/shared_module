@@ -58,9 +58,10 @@ public class ChatRequest {
     }
 
 
-    // 推理模型（o 系列、gpt-5 系列）不接受 temperature 與 max_tokens
+    // 推理模型（o 系列、gpt-5、gpt-6 系列）不接受 temperature 與 max_tokens
     private boolean isReasoningModel() {
-        return model.contains("o1") || model.contains("o3") || model.startsWith("o4") || model.startsWith("gpt-5");
+        return model.contains("o1") || model.contains("o3") || model.startsWith("o4")
+                || model.startsWith("gpt-5") || model.startsWith("gpt-6");
     }
 
     // 使用 @JsonGetter 並搭配 @JsonInclude 當回傳 null 時不序列化該 key
