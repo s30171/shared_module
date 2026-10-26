@@ -1,6 +1,5 @@
 package idv.mark.share_module.util;
 
-import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import idv.mark.share_module._enum.LanguageEnum;
@@ -21,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -91,10 +91,9 @@ public class TranslateUtil {
         return translate(translateModel);
     }
 
-    // 偵測字幕語言
+    // 偵測字幕語言：從整份字幕平均抽樣，避免開場剛好講其他語言而誤判
     public LanguageEnum detectLanguage(List<SRTModel> srtModels) {
-        List<List<SRTModel>> partition = Lists.partition(srtModels, 30);
-        List<SRTModel> srtModelList = partition.get(0);
+        List<SRTModel> srtModelList = sampleEvenly(srtModels, 30);
         String appendRequestString = srtModelList.stream()
                 .collect(StringBuilder::new, (builder, element) -> builder.append(element.getText()).append("\n"), StringBuilder::append)
                 .toString();
@@ -103,5 +102,18 @@ public class TranslateUtil {
         ResponseEntity<String> responseEntity = ConfigHelper.getBean(ChatGPTUtil.class).promptWithReq(prompt);
         String replace = responseEntity.getBody().replace("{", "").replace("}", "");
         return LanguageEnum.getByISOCode(replace);
+    }
+
+    // 從字幕中以固定間隔抽出指定數量的句子，句數不足時全部使用
+    static List<SRTModel> sampleEvenly(List<SRTModel> srtModels, int sampleSize) {
+        if (srtModels.size() <= sampleSize) {
+            return srtModels;
+        }
+        double step = (double) srtModels.size() / sampleSize;
+        List<SRTModel> samples = new ArrayList<>(sampleSize);
+        for (int i = 0; i < sampleSize; i++) {
+            samples.add(srtModels.get((int) (i * step)));
+        }
+        return samples;
     }
 }
